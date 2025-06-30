@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Meu Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'usuarios/css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Meu Site</h1>
+        <nav>
+            {% block nav %}
+            <a href="/">Início</a> |
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+            {% endblock %}
+
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Conteúdo específico da página vai aqui -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; {% now "Y" %} - Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
