@@ -1,4 +1,4 @@
-package com.servito.servitoback.resource;
+package com.servito.servitoback.controller;
 
 import com.servito.servitoback.model.Teste;
 import com.servito.servitoback.service.TesteService;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/teste")
-class TesteResource {
+class TesteController {
 
     @Autowired
     private TesteService testeService;
