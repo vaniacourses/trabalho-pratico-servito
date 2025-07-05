@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Servito - Encontre ou Ofereça Serviços</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Servito</h1>
+        <nav>
+            <a href="{% url 'login' %}">Entrar</a>
+            <a href="{% url 'cadastro' %}">Cadastrar</a>
+        </nav>
+    </header>
+
+    <div class="intro">
+        <h2>Bem-vindo ao Servito!</h2>
+        <p>Ofereça ou contrate serviços de forma simples, direta e sem burocracia. Um mercado aberto para todos!</p>
+    </div>
+
+    <div class="services">
+        <div class="service-card">
+            <img src="{% static 'imagens/domesticos.jpg' %}" alt="Serviços Domésticos">
+            <h3>Serviços Domésticos</h3>
+            <p>Encontre profissionais para limpeza, encanamento, elétrica e muito mais.</p>
+        </div>
+        <div class="service-card">
+            <img src="{% static 'imagens/design.jpg' %}" alt="Design e Tecnologia">
+            <h3>Design e Tecnologia</h3>
+            <p>Contrate designers, programadores e criadores para seus projetos digitais.</p>
+        </div>
+        <div class="service-card">
+            <img src="{% static 'imagens/aulas.jpg' %}" alt="Aulas e Reforço">
+            <h3>Aulas e Reforço</h3>
+            <p>Aulas particulares de reforço, música, idiomas e muito mais perto de você.</p>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Servito - Todos os direitos reservados
+    </footer>
+</body>
+</html>
