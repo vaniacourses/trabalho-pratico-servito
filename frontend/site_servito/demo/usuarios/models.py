@@ -41,5 +41,6 @@ class Contratacao(models.Model):
     descricao = models.CharField(max_length=1000, verbose_name="Descrição")
     aceito = models.BooleanField()
     finalizado = models.BooleanField()
-    prestador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='prestador')
-    contratante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='contratante')
+    anuncio_origem = models.ForeignKey(Anuncio, on_delete=models.DO_NOTHING, related_name='anuncios')
+    prestador = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='prestador')
+    contratante = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='contratante')
