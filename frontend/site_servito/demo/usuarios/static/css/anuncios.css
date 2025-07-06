@@ -1,0 +1,57 @@
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 2em;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5em;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #F2C438;
+            padding: 1em;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #2b6777;
+        }
+
+        .paginacao {
+            text-align: center;
+            margin-top: 2em;
+        }
+
+        .paginacao a,
+        .paginacao span {
+            display: inline-block;
+            margin: 0 0.3em;
+            padding: 0.5em 0.9em;
+            border-radius: 5px;
+            color: #2b6777;
+            text-decoration: none;
+            border: 1px solid #2b6777;
+        }
+
+        .paginacao .current {
+            background-color: #2b6777;
+            color: white;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .paginacao .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }

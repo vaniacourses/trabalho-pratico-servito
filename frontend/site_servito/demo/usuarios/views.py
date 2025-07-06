@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView
@@ -8,6 +9,7 @@ from .forms import UsuarioForm
 from datetime import date
 from .services import DjangoStrategy, ApiStrategy
 from django.conf import settings
+from .models import Anuncio
 
 
 def get_strategy():
@@ -23,9 +25,6 @@ def welcome(request):
 def index(request):
     return render(request, "index.html")
 
-def cadastroo(request):
-    return render(request, "cadastro.html")
-
 def cadastro_usuario(request):
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
@@ -39,6 +38,17 @@ def cadastro_usuario(request):
     else:
         form = UsuarioForm()
     return render(request, 'cadastro.html', {'form': form})
+
+def get_anuncios(request):
+    strategy = get_strategy()
+    anuncios_list = strategy.get(Anuncio, None)
+    paginator = Paginator(anuncios_list, 12)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'anuncios.html', {'page_obj': page_obj})
+
 
 class MeuLoginView(LoginView):
     template_name = 'login.html'
