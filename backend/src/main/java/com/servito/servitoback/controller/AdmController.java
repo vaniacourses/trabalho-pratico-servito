@@ -39,6 +39,4 @@ public class AdmController {
         this.admService.deleteAdm(id);
     }
 
-    // TODO: validaAdm(Admin adm)
-
 }

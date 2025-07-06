@@ -21,7 +21,7 @@ public class AdmService {
 
     @Transactional
     public Adm createAdm(Adm adm) {
-        // TODO: Validações de regras de negócio??
+        if (!validaAdm(adm)) throw new IllegalArgumentException("Adm inválido");
 
         return admRepository.save(adm);
     }
@@ -32,22 +32,37 @@ public class AdmService {
     }
 
     @Transactional
-    public Adm updateAdm(Adm dadosDoRequest) {
-        Adm admExistente = this.getAdmById(dadosDoRequest.getId());
+    public Adm updateAdm(Adm adm) {
+        if (!validaAdm(adm)) throw new IllegalArgumentException("Adm inválido");
 
-        admExistente.setNome(dadosDoRequest.getNome());
-        admExistente.setCargo(dadosDoRequest.getCargo());
-        admExistente.setCpf(dadosDoRequest.getCpf());
+        Adm admExistente = this.getAdmById(adm.getId());
 
-        // TODO: Criptografar?
-        if (dadosDoRequest.getSenha() != null && !dadosDoRequest.getSenha().isEmpty()) {
-            admExistente.setSenha(dadosDoRequest.getSenha());
-        }
+        copiarDadosAdm(admExistente, adm);
 
         return admRepository.save(admExistente);
     }
 
-    // TODO: validaAdm(Admin adm)
+    private void copiarDadosAdm(Adm destino, Adm origem) {
+        destino.setNome(origem.getNome());
+        destino.setEmail(origem.getEmail());
+        destino.setSenha(origem.getSenha());
+        destino.setTelefone(origem.getTelefone());
+        destino.setEndereco(origem.getEndereco());
+        destino.setCidade(origem.getCidade());
+        destino.setDocumento(origem.getDocumento());
+        destino.setCargo(origem.getCargo());
+    }
+
+    public boolean validaAdm(Adm adm) {
+        return adm != null &&
+                adm.getNome() != null && !adm.getNome().isBlank() &&
+                adm.getEmail() != null && !adm.getEmail().isBlank() &&
+                adm.getSenha() != null && !adm.getSenha().isBlank() &&
+                adm.getDocumento() != null && !adm.getDocumento().isBlank() &&
+                adm.getDataCadastro() != null &&
+                adm.getCargo() != null  && !adm.getCargo().isBlank();
+    }
+
 
     @Transactional
     public void deleteAdm(Long id) {

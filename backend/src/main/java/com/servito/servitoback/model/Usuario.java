@@ -1,109 +1,161 @@
 package com.servito.servitoback.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements Cadastro{
 
   @Id
   @Column(nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String email;
-
-  private String senha;
-
+  @Column(nullable = false)
   private String nome;
 
-  private Date dataNascimento;
+  @Column(nullable = false)
+  private String email;
 
+  @Column(nullable = false)
+  private String senha;
+
+  private String telefone;
+
+  @Column(nullable = false)
+  private String documento;
+
+  private String endereco;
+
+  private String cidade;
+
+  @CreationTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(nullable = false, updatable = false)
   private Date dataCadastro;
 
-  private String cpf;
+  @Column(nullable = false)
+  private Date dataNascimento;
 
-  private Boolean isBanned;
+  private Boolean isBanned = false;
 
   public Usuario() {
-    super();
   }
 
-  public Usuario(Long id, String email, String senha, String nome, Date dataNascimento, Date dataCadastro, String cpf) {
+  public Usuario(Long id, String nome, String email, String senha, String telefone, String documento, String endereco, String cidade, Date dataCadastro, Date dataNascimento) {
     this.id = id;
+    this.nome = nome;
     this.email = email;
     this.senha = senha;
-    this.nome = nome;
-    this.dataNascimento = dataNascimento;
+    this.telefone = telefone;
+    this.documento = documento;
+    this.endereco = endereco;
+    this.cidade = cidade;
     this.dataCadastro = dataCadastro;
-    this.cpf = cpf;
-    this.isBanned = false;
+    this.dataNascimento = dataNascimento;
+  }
+
+  @Override
+  public String getNome() {
+    return nome;
+  }
+
+  @Override
+  public String getEmail() {
+    return email;
+  }
+
+  @Override
+  public String getSenha() {
+    return senha;
+  }
+
+  @Override
+  public String getTelefone() {
+    return telefone;
+  }
+
+  @Override
+  public String getDocumento() {
+    return documento;
+  }
+
+  @Override
+  public String getEndereco() {
+    return endereco;
+  }
+
+  @Override
+  public String getCidade() {
+    return cidade;
+  }
+
+  @Override
+  public Date getDataCadastro() {
+    return dataCadastro;
   }
 
   public Long getId() {
     return id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getSenha() {
-    return senha;
-  }
-
-  public void setSenha(String senha) {
-    this.senha = senha;
-  }
-
-  public String getNome() {
-    return nome;
-  }
-
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
-
   public Date getDataNascimento() {
     return dataNascimento;
-  }
-
-  public void setDataNascimento(Date dataNascimento) {
-    this.dataNascimento = dataNascimento;
-  }
-
-  public Date getDataCadastro() {
-    return dataCadastro;
-  }
-
-  public void setDataCadastro(Date dataCadastro) {
-    this.dataCadastro = dataCadastro;
-  }
-
-  public String getCpf() {
-    return cpf;
-  }
-
-  public void setCpf(String cpf) {
-    this.cpf = cpf;
   }
 
   public Boolean getBanned() {
     return isBanned;
   }
 
+  @Override
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  @Override
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public void setSenha(String senha) {
+    this.senha = senha;
+  }
+
+  @Override
+  public void setTelefone(String telefone) {
+    this.telefone = telefone;
+  }
+
+  @Override
+  public void setDocumento(String documento) {
+    this.documento = documento;
+  }
+
+  @Override
+  public void setEndereco(String endereco) {
+    this.endereco = endereco;
+  }
+
+  @Override
+  public void setCidade(String cidade) {
+    this.cidade = cidade;
+  }
+
+  @Override
+  public void setDataCadastro(Date dataCadastro) {
+    this.dataCadastro = dataCadastro;
+  }
+
+  public void setDataNascimento(Date dataNascimento) {
+    this.dataNascimento = dataNascimento;
+  }
+
   public void setBanned(Boolean banned) {
-    isBanned = banned;
+    this.isBanned = banned;
   }
 }
 

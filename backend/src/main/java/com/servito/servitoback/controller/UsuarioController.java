@@ -39,7 +39,10 @@ public class UsuarioController {
         this.usuarioService.deleteUsuario(id);
     }
 
-    // TODO: setBanimento(Long idAdm)
+    @PutMapping("/adm/{idAdm}/banir/{idUsuario}")
+    public Usuario setBanimento(@PathVariable Long idAdm, @PathVariable Long idUsuario) {
+        return this.usuarioService.setBanimento(idAdm, idUsuario);
+    }
 
-    // TODO: createHistorico(Long userId)
-}
+
+    }
