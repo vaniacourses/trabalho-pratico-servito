@@ -8,6 +8,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('home/', views.home, name='home'),
     path('cadastro/', views.cadastro_usuario, name='cadastro'),
-    path('anuncios/', views.get_anuncios, name='anuncios')
+    path('anuncios/', views.get_anuncios, name='anuncios'),
+    path('anuncio/<int:id>/', views.get_anuncio_by_id, name='anuncio')
+    
     #F2C438
 ]

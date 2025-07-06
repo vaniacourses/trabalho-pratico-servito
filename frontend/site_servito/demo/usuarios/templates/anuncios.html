@@ -13,12 +13,14 @@
 
         <div class="grid">
             {% for anuncio in page_obj %}
+            <a href="{% url 'anuncio' anuncio.id %}" class="card-link" >
                 <div class="card">
                     <h3>{{ anuncio.titulo }}</h3>
-                    <p>{{ anuncio.descricao|truncatewords:20 }}</p>
+                    <p>{{ anuncio.descricao|truncatewords:24 }}</p>
+                    <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
                     <p><strong>Categoria:</strong> {{ anuncio.tags }}</p>
-                    <p><strong>Preço:</strong> R$ {{ anuncio.preco }}</p>
                 </div>
+            </a>
             {% empty %}
                 <p>Nenhum anúncio encontrado.</p>
             {% endfor %}

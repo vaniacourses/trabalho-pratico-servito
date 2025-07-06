@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ anuncio.titulo }} - Servito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/anuncio_individual.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ anuncio.titulo }}</h1>
+        <p class="tags">Categoria: {{ anuncio.tags }}</p>
+        <p class="cidade">Cidade: {{ anuncio.cidade }}</p>
+        <div class="descricao">
+            <p>{{ anuncio.descricao }}</p>
+        </div>
+
+        <div class="contato">
+            <h3>Contato do Anunciante</h3>
+            <p><strong>Nome:</strong> {{ anuncio.usuario.nome }}</p>
+            <p><strong>Email:</strong> {{ anuncio.usuario.email }}</p>
+            <p><strong>Telefone:</strong> {{ anuncio.usuario.telefone }}</p>
+        </div>
+
+        <a class="voltar" href="{% url 'anuncios' %}">← Voltar para anúncios</a>
+    </div>
+</body>
+</html>

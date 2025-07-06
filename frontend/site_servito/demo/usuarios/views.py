@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -41,7 +41,7 @@ def cadastro_usuario(request):
 
 def get_anuncios(request):
     strategy = get_strategy()
-    anuncios_list = strategy.get(Anuncio, None)
+    anuncios_list = strategy.get_list(Anuncio, None)
     paginator = Paginator(anuncios_list, 12)
 
     page_number = request.GET.get('page')
@@ -49,6 +49,12 @@ def get_anuncios(request):
 
     return render(request, 'anuncios.html', {'page_obj': page_obj})
 
+def get_anuncio_by_id(request, id):
+    strategy = get_strategy()
+    anuncio = strategy.get_single(Anuncio, id)
+    return render(request, 'anuncio_individual.html', {
+        'anuncio': anuncio
+        })
 
 class MeuLoginView(LoginView):
     template_name = 'login.html'
