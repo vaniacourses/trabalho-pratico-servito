@@ -13,6 +13,8 @@ class Cadastro(models.Model):
     endereco = models.CharField(max_length=64)
     cidade = models.CharField(max_length=64)
     data_cadastro = models.DateField()
+    class Meta:
+        abstract = True
 
 
 class Usuario(Cadastro):

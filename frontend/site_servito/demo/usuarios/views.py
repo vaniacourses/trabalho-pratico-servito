@@ -128,7 +128,7 @@ def login_simples(request):
         try:
             adm = Adm.objects.get(email=email, senha=senha)
             return redirect("/certificados/")
-        except adm.DoesNotExist:    
+        except Adm.DoesNotExist:    
             pass
 
         # Verifica se é usuario
