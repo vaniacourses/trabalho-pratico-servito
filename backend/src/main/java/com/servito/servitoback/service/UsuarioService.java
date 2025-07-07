@@ -1,5 +1,6 @@
 package com.servito.servitoback.service;
 
+import com.servito.servitoback.model.Historico;
 import com.servito.servitoback.model.Usuario;
 import com.servito.servitoback.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +19,9 @@ public class UsuarioService {
     @Autowired
     private AdmService admService;
 
+    @Autowired
+    private HistoricoService historicoService;
+
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
@@ -26,7 +30,12 @@ public class UsuarioService {
     public Usuario createUsuario(Usuario usuario) {
         if (!validaUsuario(usuario)) throw new IllegalArgumentException("Usuário inválido");
 
-        return usuarioRepository.save(usuario);
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+        Historico novoHistorico = historicoService.createHistorico(usuarioSalvo.getId());
+
+        usuarioSalvo.setHistorico(novoHistorico);
+
+        return usuarioRepository.save(usuarioSalvo);
     }
 
     public Usuario getUserById(Long id) {
