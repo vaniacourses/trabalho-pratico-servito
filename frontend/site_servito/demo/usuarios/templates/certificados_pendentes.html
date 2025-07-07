@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificados Pendentes</title>
+    <link href="{% static 'css/certificados_pendentes.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <h2>Certificados Pendentes</h2>
+
+        {% if certificados %}
+            {% for c in certificados %}
+                <div class="certificado">
+                    <p><strong>Título:</strong> {{ c.titulo }}</p>
+                    <p><strong>Instituição:</strong> {{ c.insituicao }}</p>
+                    <p><strong>Data:</strong> {{ c.data }}</p>
+                    <p><strong>Usuário:</strong> {{ c.usuario.nome }} ({{ c.usuario.email }})</p>
+                    <p><strong>Link:</strong> <a href="{{ c.link }}" target="_blank">{{ c.link }}</a></p>
+
+                    <div class="botoes">
+                        <form method="post" action="{% url 'avaliar_certificado' c.id 'aprovar' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="botao botao-aprovar">Aprovar</button>
+                        </form>
+                        <form method="post" action="{% url 'avaliar_certificado' c.id 'rejeitar' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="botao botao-rejeitar">Rejeitar</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum certificado pendente no momento.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

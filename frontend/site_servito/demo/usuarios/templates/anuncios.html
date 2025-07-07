@@ -1,13 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Anúncios - Servito</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'css/anuncios.css' %}" rel="stylesheet">
-</head>
-<body>
+
+{% block title %}Cadastro - Servito{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/anuncios.css' %}">
+{% endblock %}
+
+{% block content %}
+
     <div class="container">
         <h1>Todos os Anúncios</h1>
 
@@ -53,5 +54,4 @@
             {% endif %}
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

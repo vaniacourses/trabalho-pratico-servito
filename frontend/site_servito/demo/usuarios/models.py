@@ -5,7 +5,7 @@ import hashlib
 
 
 class Cadastro(models.Model):
-    nome = models.CharField(max_length=64, unique = True)
+    nome = models.CharField(max_length=64)
     email = models.CharField(max_length=64, unique = True)
     senha = models.CharField(max_length=64)
     telefone = models.CharField(max_length=64, unique=True)
