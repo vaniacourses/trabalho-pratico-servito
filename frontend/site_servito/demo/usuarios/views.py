@@ -116,6 +116,7 @@ class MeuLogoutView(View):
 '''
 
 def login_simples(request):
+    usuario = None
     form = LoginForm(request.POST or None)
     error = None
 
@@ -135,7 +136,7 @@ def login_simples(request):
         try:
             usuario = Usuario.objects.get(email=email, senha=senha)
             return redirect("/anuncios/")
-        except usuario.DoesNotExist:
+        except Usuario.DoesNotExist:
             error = "Credenciais inválidas."
 
     return render(request, "login.html", {"form": form, "error": error})
