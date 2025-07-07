@@ -47,6 +47,14 @@ class Contratacao(models.Model):
     prestador = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='prestador')
     contratante = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='contratante')
 
+class Pendente(models.Model):
+    preco = models.IntegerField(verbose_name="Preço", null=True)
+    prazo = models.DateField(null=True)
+    descricao = models.CharField(max_length=1000, verbose_name="Descrição")
+    prestador = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='possivel_prestador')
+    contratante = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='possivel_contratante')
+
+
 class Certificado(models.Model):
     titulo = models.CharField(max_length=100, verbose_name="Título")
     insituicao = models.CharField(max_length=100, verbose_name="Instituição")

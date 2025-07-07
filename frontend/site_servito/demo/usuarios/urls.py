@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, home, cadastro_usuario, anuncios,get_anuncios,get_anuncio_by_id,login_simples, logout_simples, teste_sessao, contratacao, avaliar_contratacao
+from .views import index, home, cadastro_usuario, anuncios,get_anuncios,get_anuncio_by_id,login_simples, logout_simples, teste_sessao, contratacao, avaliar_contratacao, get_pendentes
 
 urlpatterns = [
     #path('logout/', auth_views.LogoutView.as_view(next_page='welcome'), name='logout'),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('teste_sessao/', teste_sessao, name='teste_sessao'),
     path('anuncio/<int:id>/contratacao/',  contratacao, name='contratacao'),
     path('contratacao/<int:id>/avaliar/', avaliar_contratacao, name='avaliar_contratacao'),
+    path('pendentes/', get_pendentes, name='pendentes')
 
     #F2C438
 ]
