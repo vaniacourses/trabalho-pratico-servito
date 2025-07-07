@@ -27,9 +27,16 @@ def welcome(request):
     return render(request, "welcome.html")
 
 def index(request):
-    return render(request, 'index.html', {'usuario_logado': request.user.is_authenticated})
+    if 'email' in request.session:
+        return render(request, 'index.html', {'usuario_logado': True})
+    else:
+        return render(request, 'index.html', {'usuario_logado': False})
 
 def anuncios(request):
+    if 'email' not in request.session:
+        return redirect('login')
+    email = request.session['email']
+    usuario = Usuario.objects.get(email=email)
     return render(request, 'anuncios.html', {'usuario_logado': request.user.is_authenticated})
 
 
@@ -128,6 +135,7 @@ def login_simples(request):
         # Verifica se é adm
         try:
             adm = Adm.objects.get(email=email, senha=senha)
+            request.session['email'] = adm.email
             return redirect("/certificados/")
         except Adm.DoesNotExist:    
             pass
@@ -135,11 +143,23 @@ def login_simples(request):
         # Verifica se é usuario
         try:
             usuario = Usuario.objects.get(email=email, senha=senha)
+            request.session['email'] = usuario.email
             return redirect("/anuncios/")
         except Usuario.DoesNotExist:
             error = "Credenciais inválidas."
 
     return render(request, "login.html", {"form": form, "error": error})
+
+def logout_simples(request):
+    request.session.flush()
+    return redirect('index')  
+
+def teste_sessao(request):
+    if 'visitas' in request.session:
+        request.session['visitas'] += 1
+    else:
+        request.session['visitas'] = 1
+    return HttpResponse(f"Visitas: {request.session['visitas']}")
 
 
 
