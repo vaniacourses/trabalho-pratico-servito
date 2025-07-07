@@ -11,23 +11,27 @@
     <div class="container">
         <h1>Histórico de Contratações</h1>
 
-        <form method="get" action="{% url 'anuncios' %}" class="search-form">
-            <input type="text" name="q" placeholder="Pesquisar contratações..." value="{{ request.GET.q }}">
+        <form method="get" action="{% url 'historico' %}" class="search-form">
+            <input type="text" name="q" placeholder="Pesquisar Contratações..." value="{{ request.GET.q }}">
             <button type="submit">Buscar</button>
         </form>
 
         <div class="grid">
             {% for contratacao in page_obj %}
-            <a href="{% url 'anuncio' anuncio.id %}" class="card-link" >
+            <a href="{% url 'contratacao' contratacao.id %}" class="card-link" >
                 <div class="card">
-                    <h3>{{ anuncio.titulo }}</h3>
-                    <p>{{ anuncio.descricao|truncatewords:24 }}</p>
-                    <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
-                    <p><strong>Categoria:</strong> {{ anuncio.tags }}</p>
+                    <h3>{{ contratacao.prazo }}</h3>
+                    <p><strong>Preço:</strong> {{ contratacao.Preco }}</p>
+                    <p><strong>Prazo:</strong> {{ contratacao.descricao }}</p>
+                    <p><strong>Finalizado:</strong> {{ contratacao.descricao }}</p>
+                    <p><strong>Prazo:</strong> {{ contratacao.descricao }}</p>
+                    <p><strong>Prestador:</strong> {{ contratacao.descricao }}</p>
+                    <p><strong>Contratante:</strong> {{ contratacao.descricao }}</p>
+                    <p><strong>Descrição:</strong> {{ contratacao.descricao }}</p>
                 </div>
             </a>
             {% empty %}
-                <p>Nenhum anúncio encontrado.</p>
+                <p>Nenhuma contratação encontrada.</p>
             {% endfor %}
         </div>
 

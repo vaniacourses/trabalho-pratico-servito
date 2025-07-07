@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pendente.anuncio.titulo }} - Servito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/anuncio_individual.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ pendente.anuncio.titulo }}</h1>
+        <p class="tags">Preco: {{ pendente.preco }}</p>
+        <p class="cidade">Prazo: {{ pendente.prazo }}</p>
+        <div class="descricao">
+            <p>{{ pendente.descricao }}</p>
+        </div>
+
+        <div class="contato">
+            <h3>Contato do Contratante</h3>
+            <p><strong>Nome:</strong> {{ pendente.contratante.nome }}</p>
+            <p><strong>Email:</strong> {{ anuncio.contratante.email }}</p>
+            <p><strong>Telefone:</strong> {{ anuncio.contratante.telefone }}</p>
+        </div>
+        <div class ="botoes">
+            <a class="voltar" href="{% url 'anuncios' %}">← Voltar para pendências</a>
+            <a class="aceitar" href="{% url 'index' %}">Aceitar</a>
+            <a class="recusar" href="{% url 'index' %}">Recusar</a>
+        </div>
+    </div>
+</body>
+</html>

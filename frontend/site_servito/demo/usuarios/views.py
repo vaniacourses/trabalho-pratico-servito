@@ -202,6 +202,13 @@ def get_pendentes(request):
         'usuario_logado': 'email' in request.session
     })
 
+def get_pendente_by_id(request, id):
+    strategy = get_strategy()
+    pendente = strategy.get_single(Pendente, id)
+    return render(request, 'pendente.html', {
+        'pendente': pendente
+        })
+
 def get_contratacoes(request):
     strategy = get_strategy()
     query = request.GET.get('q', '')

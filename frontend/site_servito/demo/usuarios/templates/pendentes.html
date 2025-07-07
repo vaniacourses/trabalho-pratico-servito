@@ -11,7 +11,7 @@
     <div class="container">
         <h1>Suas Pendências</h1>
 
-        <form method="get" action="{% url 'anuncios' %}" class="search-form">
+        <form method="get" action="{% url 'pendentes' %}" class="search-form">
             <input type="text" name="q" placeholder="Pesquisar pendências..." value="{{ request.GET.q }}">
             <button type="submit">Buscar</button>
         </form>
