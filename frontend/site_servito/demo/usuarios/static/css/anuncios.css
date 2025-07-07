@@ -5,6 +5,10 @@ body {
             padding: 2em;
         }
 
+h1 {
+    text-align: center;
+    }
+
         .container {
             max-width: 1000px;
             margin: auto;
@@ -74,3 +78,44 @@ body {
             opacity: 0.5;
             pointer-events: none;
         }
+
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 10px;
+}
+
+
+.search-form input[type="text"] {
+    width: 300px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.search-form input[type="text"]:focus {
+    outline: none;
+    border-color: #2b6777;
+    box-shadow: 0 0 5px #2b6777;
+}
+
+
+.search-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #2b6777;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #2b6777;
+}

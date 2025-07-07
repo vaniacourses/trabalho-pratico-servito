@@ -61,13 +61,24 @@ def cadastro_usuario(request):
 
 def get_anuncios(request):
     strategy = get_strategy()
-    anuncios_list = strategy.get_list(Anuncio, None)
+    query = request.GET.get('q', '')
+    if query:
+        anuncios_list = strategy.get_list(Anuncio, None)
+        anuncios_list = [a for a in anuncios_list if query.lower() in a.titulo.lower() 
+                         or query.lower() in a.descricao.lower() 
+                         or query.lower() in a.tags.lower()]
+    else:
+        anuncios_list = strategy.get_list(Anuncio, None)
     paginator = Paginator(anuncios_list, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'anuncios.html', {'page_obj': page_obj})
+    return render(request, 'anuncios.html', {
+        'page_obj': page_obj,
+        'query': query,  
+        'usuario_logado': 'email' in request.session
+    })
 
 def get_anuncio_by_id(request, id):
     strategy = get_strategy()
