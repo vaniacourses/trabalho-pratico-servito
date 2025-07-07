@@ -1,12 +1,13 @@
 from django.urls import path
-from . import views
-from django.contrib.auth import views as auth_views
+from .views import login_simples
+from .views import index, home, cadastro_usuario, anuncios
+
 
 urlpatterns = [
-    path("login/", views.MeuLoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='welcome'), name='logout'),
-    path('', views.index, name='index'),
-    path('home/', views.home, name='home'),
-    path('cadastro/', views.cadastro_usuario, name='cadastro')
+    path("login/", login_simples, name='login'),
+    path('', index, name='index'),
+    path('index/', home, name='index'),
+    path('cadastro/', cadastro_usuario, name='cadastro'),
+    path('anuncios/', anuncios, name='cadastro')
     #F2C438
 ]

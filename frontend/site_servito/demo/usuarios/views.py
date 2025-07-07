@@ -1,13 +1,17 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
-from .forms import UsuarioForm
+from .forms import UsuarioForm, LoginForm
 from datetime import date
 from .services import DjangoStrategy, ApiStrategy
 from django.conf import settings
+from django.contrib.auth.hashers import make_password
+from django.views import View
+from django.contrib.auth.views import LogoutView
+from .models import Adm, Usuario
 
 
 def get_strategy():
@@ -21,9 +25,13 @@ def welcome(request):
     return render(request, "welcome.html")
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, 'index.html', {'usuario_logado': request.user.is_authenticated})
 
-def cadastroo(request):
+def anuncios(request):
+    return render(request, 'anuncios.html', {'usuario_logado': request.user.is_authenticated})
+
+
+def cadastro(request):
     return render(request, "cadastro.html")
 
 def cadastro_usuario(request):
@@ -33,28 +41,67 @@ def cadastro_usuario(request):
             usuario = form.save(commit=False)
             usuario.data_cadastro = date.today()
             usuario.is_banned =  False
+            usuario.senha = form.cleaned_data['senha']
             strategy = get_strategy()
             strategy.post(form)
+            usuario.save()
             return redirect('login')
     else:
         form = UsuarioForm()
     return render(request, 'cadastro.html', {'form': form})
 
-class MeuLoginView(LoginView):
-    template_name = 'login.html'
+'''
+class MeuLoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'login.html', {'form': form})
 
-    success_url = reverse_lazy('home')
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            senha = form.cleaned_data['senha']
+            
+            
+            user = authenticate(request, username=email, password=senha)
+            if user is not None:
+                login(request, user)
+                return redirect('index') 
+            else:
+                form.add_error(None, 'E-mail ou senha inválidos.')
 
-    def get_success_url(self):
-        return self.success_url
+        return render(request, 'login.html', {'form': form})
 
-class MeuLogoutView(LogoutView):
-    template_name = 'logout.html'
 
-    success_url = reverse_lazy('welcome')
+class MeuLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('index') 
+'''
 
-    def get_success_url(self):
-        return self.success_url
+def login_simples(request):
+    form = LoginForm(request.POST or None)
+    error = None
+
+    if request.method == "POST" and form.is_valid():
+        email = form.cleaned_data["email"]
+        senha = form.cleaned_data["senha"]
+
+        # Verifica se é adm
+        try:
+            adm = Adm.objects.get(email=email, senha=senha)
+            return redirect("/certificados/")
+        except Adm.DoesNotExist:    
+            pass
+
+        # Verifica se é usuario
+        try:
+            usuario = Usuario.objects.get(email=email, senha=senha)
+            return redirect("/anuncios/")
+        except Usuario.DoesNotExist:
+            error = "Credenciais inválidas."
+
+    return render(request, "login.html", {"form": form, "error": error})
 
 
 

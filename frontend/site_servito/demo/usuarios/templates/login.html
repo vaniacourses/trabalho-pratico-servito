@@ -1,18 +1,37 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Login{% endblock %}
-
-{% block nav %}
-<a href="/">Início</a> |
-<a href="/login/">Login</a>
-{% endblock %}
-
-{% block content %}
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Entrar</button>
-</form>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Servito</title>
+    <link href="{% static 'css/form.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="form-container">
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <h1>Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="errorlist">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit">Entrar</button>
+    </form>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+</body>
+</html>
