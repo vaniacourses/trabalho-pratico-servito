@@ -202,6 +202,28 @@ def get_pendentes(request):
         'usuario_logado': 'email' in request.session
     })
 
+def get_contratacoes(request):
+    strategy = get_strategy()
+    query = request.GET.get('q', '')
+    if query:
+        pendentes_list = strategy.get_list(Pendente, None)
+        pendentes_list = [a for a in pendentes_list if query.lower() in a.titulo.lower() 
+                         or query.lower() in a.descricao.lower() 
+                         or query.lower() in a.tags.lower()]
+    else:
+        pendentes_list = strategy.get_list(Pendente, None)
+    paginator = Paginator(pendentes_list, 12)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'pendentes.html', {
+        'page_obj': page_obj,
+        'query': query,  
+        'usuario_logado': 'email' in request.session
+    })
+
+
 
 
 

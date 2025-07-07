@@ -53,6 +53,8 @@ class Pendente(models.Model):
     descricao = models.CharField(max_length=1000, verbose_name="Descrição")
     prestador = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='possivel_prestador')
     contratante = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='possivel_contratante')
+    anuncio = models.ForeignKey(Anuncio, on_delete=models.CASCADE, related_name='pendencias')
+
 
 
 class Certificado(models.Model):
