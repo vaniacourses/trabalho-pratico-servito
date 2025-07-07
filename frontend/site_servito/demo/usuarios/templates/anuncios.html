@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Anúncios - Servito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/anuncios.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Todos os Anúncios</h1>
+
+        <div class="grid">
+            {% for anuncio in page_obj %}
+            <a href="{% url 'anuncio' anuncio.id %}" class="card-link" >
+                <div class="card">
+                    <h3>{{ anuncio.titulo }}</h3>
+                    <p>{{ anuncio.descricao|truncatewords:24 }}</p>
+                    <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
+                    <p><strong>Categoria:</strong> {{ anuncio.tags }}</p>
+                </div>
+            </a>
+            {% empty %}
+                <p>Nenhum anúncio encontrado.</p>
+            {% endfor %}
+        </div>
+
+        <div class="paginacao">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">← Anterior</a>
+            {% else %}
+                <span class="disabled">← Anterior</span>
+            {% endif %}
+
+            {% for page_num in page_obj.paginator.page_range %}
+                {% if page_num == page_obj.number %}
+                    <span class="current">{{ page_num }}</span>
+                {% else %}
+                    <a href="?page={{ page_num }}">{{ page_num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Próxima →</a>
+            {% else %}
+                <span class="disabled">Próxima →</span>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
