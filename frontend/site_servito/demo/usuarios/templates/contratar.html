@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ anuncio.titulo }} - Servito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/contratacao.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ anuncio.titulo }}</h1>
+        <div class="informacoes_contrato">
+            <div class="item_informacoes_contrato">
+                <p><strong>Nome:</strong> {{ anuncio.usuario.nome }}</p>
+                <p><strong>Email:</strong> {{ anuncio.usuario.email }}</p>
+                <p><strong>Telefone:</strong> {{ anuncio.usuario.telefone }}</p>
+                <p><strong>Categoria:</strong> {{ anuncio.tags }}</p>
+                <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
+            </div>
+            <div class="item_informacoes_contrato">
+                <form id="contratacaoForm">
+                    <label>Data do serviço</label>
+                    <input type="date" id="data" name="data" required>
+
+                    <label>Detalhes</label>
+                    <input type="text" id="detalhes" name="detalhes" required>
+
+                    <label>Preço proposto</label>
+                    <input type="number" id="valor" name="valor" required>
+
+                    <button type="submit">Enviar contratação</button>
+                </form>
+            </div>
+        </div>
+        <div class ="botoes">
+            <a class="voltar" href="{% url 'anuncios' %}">← Voltar</a>
+        </div>
+    </div>
+</body>
+</html>

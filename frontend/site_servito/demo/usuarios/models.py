@@ -13,6 +13,8 @@ class Cadastro(models.Model):
     endereco = models.CharField(max_length=64)
     cidade = models.CharField(max_length=64)
     data_cadastro = models.DateField()
+    class Meta:
+        abstract = True
 
 
 class Usuario(Cadastro):
@@ -36,14 +38,23 @@ class Anuncio(models.Model):
     #related: contratacoes
 
 class Contratacao(models.Model):
-    #TODO Mudar nas classes o preço para int
-    preco = models.IntegerField(verbose_name="Preço")
-    #TODO Mudar nas classes o prazo para datetime
-    prazo = models.DateField()
-    #TODO mudar nas classes a descricao para string normal
+    preco = models.IntegerField(verbose_name="Preço", null=True)
+    prazo = models.DateField(null=True)
     descricao = models.CharField(max_length=1000, verbose_name="Descrição")
-    aceito = models.BooleanField()
+    aceito = models.BooleanField(null=False)
+    pendente = models.BooleanField(null=True)
     finalizado = models.BooleanField()
-    anuncio_origem = models.ForeignKey(Anuncio, on_delete=models.DO_NOTHING, related_name='anuncios')
+    #anuncio_origem = models.ManyToOneRel(Anuncio, on_delete=models.DO_NOTHING, related_name='anuncios')
     prestador = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='prestador')
     contratante = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING, related_name='contratante')
+
+
+
+class Certificado(models.Model):
+    titulo = models.CharField(max_length=100, verbose_name="Título")
+    insituicao = models.CharField(max_length=100, verbose_name="Instituição")
+    data = models.DateField()
+    link = models.CharField(max_length=1000)
+    pendente = models.BooleanField()
+    aprovado = models.BooleanField()
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='usuario')

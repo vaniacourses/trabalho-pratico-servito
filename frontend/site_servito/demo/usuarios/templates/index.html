@@ -11,8 +11,18 @@
     <header>
         <h1>Servito</h1>
         <nav>
-            <a href="{% url 'login' %}">Entrar</a>
-            <a href="{% url 'cadastro' %}">Cadastrar</a>
+            {% if usuario_logado %}
+                <a href="{% url 'anuncios' %}">Anuncios</a>
+                <a href="{% url 'pendentes' %}">Contratações Pendentes</a>
+                <a href="{% url 'historico' %}">Histórico</a>
+                <a href="{% url 'logout' %}">Sair</a>
+                
+
+            {% else %}
+                <a href="{% url 'login' %}">Entrar</a>
+                <a href="{% url 'cadastro' %}">Cadastrar</a>
+            {% endif %}
+
         </nav>
     </header>
 

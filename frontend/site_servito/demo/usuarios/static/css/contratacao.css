@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    padding: 2em;
+    margin: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+h1 {
+    color: #2b6777;
+    text-align: center;
+}
+
+.informacoes_contrato {
+    display: flex;
+    flex-wrap: wrap; /* Responsivo */
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.item_informacoes_contrato {
+    flex: 1 1 45%; /* Flexível com largura mínima */
+    background: #f9f9f9;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    min-width: 280px;
+}
+
+.descricao {
+    margin-top: 1em;
+    color: #555;
+}
+
+form label {
+    display: block;
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+form input {
+    width: 100%;
+    padding: 0.5em;
+    margin-top: 0.3em;
+    box-sizing: border-box;
+}
+
+form button {
+    margin-top: 1.5em;
+    padding: 0.6em 1em;
+    background-color: #2b6777;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #1e4e5c;
+}
+
+.botoes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em;
+}
+
+a.voltar,
+a.contratar {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a.voltar {
+    color: #2b6777;
+}
+
+a.contratar {
+    color: #F2C438;
+}
+
