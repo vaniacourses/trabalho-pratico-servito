@@ -86,7 +86,7 @@ def login_simples(request):
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data["email"]
         senha = form.cleaned_data["senha"]
-
+        
         # Verifica se é adm
         try:
             adm = Adm.objects.get(email=email, senha=senha)
