@@ -13,7 +13,7 @@ from .models import Anuncio, Usuario
 from django.contrib.auth.hashers import make_password
 from django.views import View
 from django.contrib.auth.views import LogoutView
-from .models import Adm, Usuario, Pendente
+from .models import Adm, Usuario, Contratacao
 
 
 def get_strategy():
@@ -172,25 +172,30 @@ def teste_sessao(request):
         request.session['visitas'] = 1
     return HttpResponse(f"Visitas: {request.session['visitas']}")
 
-def contratacao(request, id):
+def contratar(request, id):
     strategy = get_strategy()
     anuncio = strategy.get_single(Anuncio, id)
 
-    return render(request, "contratacao.html", {"anuncio": anuncio})
+    return render(request, "contratar.html", {"anuncio": anuncio})
 
 def avaliar_contratacao(request):
     return redirect('contratacao')
 
 def get_pendentes(request):
     strategy = get_strategy()
+    email_logado = request.session.get('email')
+    if not email_logado:
+        return render(request, 'index.html')
+    filters = {
+        'pendente': True,
+        'prestador__email': email_logado
+    }
     query = request.GET.get('q', '')
+    pendentes_list = strategy.get_list(Contratacao, filters)
     if query:
-        pendentes_list = strategy.get_list(Pendente, None)
         pendentes_list = [a for a in pendentes_list if query.lower() in a.titulo.lower() 
                          or query.lower() in a.descricao.lower() 
                          or query.lower() in a.tags.lower()]
-    else:
-        pendentes_list = strategy.get_list(Pendente, None)
     paginator = Paginator(pendentes_list, 12)
 
     page_number = request.GET.get('page')
@@ -204,31 +209,64 @@ def get_pendentes(request):
 
 def get_pendente_by_id(request, id):
     strategy = get_strategy()
-    pendente = strategy.get_single(Pendente, id)
+    pendente = strategy.get_single(Contratacao, id)
     return render(request, 'pendente.html', {
         'pendente': pendente
         })
 
 def get_contratacoes(request):
     strategy = get_strategy()
+    email_logado = request.session.get('email')
+    if not email_logado:
+        return render(request, 'index.html')
+    filters_1 = {
+        'aceito': True,
+        'contratante__email': email_logado
+    }
+    filters_2 = {
+        'aceito': True,
+        'prestador__email': email_logado
+    }
     query = request.GET.get('q', '')
+    contratacoes_list_1 = strategy.get_list(Contratacao, filters_1)
+    contratacoes_list_2 = strategy.get_list(Contratacao, filters_2)
+    contratacoes_list = list(set(contratacoes_list_1) | set(contratacoes_list_2))
     if query:
-        pendentes_list = strategy.get_list(Pendente, None)
-        pendentes_list = [a for a in pendentes_list if query.lower() in a.titulo.lower() 
+        contratacoes_list = [a for a in pendentes_list if query.lower() in a.titulo.lower() 
                          or query.lower() in a.descricao.lower() 
                          or query.lower() in a.tags.lower()]
-    else:
-        pendentes_list = strategy.get_list(Pendente, None)
-    paginator = Paginator(pendentes_list, 12)
+    
+    paginator = Paginator(contratacoes_list, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'pendentes.html', {
+    return render(request, 'historico.html', {
         'page_obj': page_obj,
         'query': query,  
         'usuario_logado': 'email' in request.session
     })
+
+def get_contratacao_by_id(request, id):
+    strategy = get_strategy()
+    contratacao = strategy.get_single(Contratacao, id)
+    return render(request, 'contratacao.html', {
+        'contratacao': contratacao
+        })
+
+def aceitar_contratacao(request, contratacao_id):
+    contratacao = get_object_or_404(Contratacao, id=contratacao_id)
+    contratacao.pendente = False
+    contratacao.aceito = True
+    contratacao.save()
+    return redirect('pendentes')
+
+def recusar_contratacao(request, contratacao_id):
+    contratacao = get_object_or_404(Contratacao, id=contratacao_id)
+    contratacao.pendente = False
+    contratacao.aceito = False
+    contratacao.save()
+    return redirect('pendentes')
 
 
 

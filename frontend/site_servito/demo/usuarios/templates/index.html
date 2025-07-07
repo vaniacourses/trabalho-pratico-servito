@@ -12,7 +12,6 @@
         <h1>Servito</h1>
         <nav>
             {% if usuario_logado %}
-                <a href="{% url 'logout' %}">Sair</a>
                 <a href="{% url 'anuncios' %}">Anuncios</a>
                 <a href="{% url 'pendentes' %}">Contratações Pendentes</a>
                 <a href="{% url 'historico' %}">Histórico</a>
