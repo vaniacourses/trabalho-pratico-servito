@@ -10,6 +10,7 @@ urlpatterns = [
     path('cadastro/', views.cadastro_usuario, name='cadastro'),
     path('anuncios/', views.get_anuncios, name='anuncios'),
     path('anuncio/<int:id>/', views.get_anuncio_by_id, name='anuncio')
-    
+    #path('perfil/<int:id>/', views.get_usuario_by_id, name='perfil')
+
     #F2C438
 ]

@@ -9,7 +9,7 @@ from .forms import UsuarioForm
 from datetime import date
 from .services import DjangoStrategy, ApiStrategy
 from django.conf import settings
-from .models import Anuncio
+from .models import Anuncio, Usuario
 
 
 def get_strategy():
@@ -55,6 +55,26 @@ def get_anuncio_by_id(request, id):
     return render(request, 'anuncio_individual.html', {
         'anuncio': anuncio
         })
+
+# def get_user_by_id(request, id):
+#     strategy = get_strategy()
+#     usuario = strategy.get_single(usuario, id)
+
+#     if request.method == 'POST':
+#         form = UsuarioUpdateForm(request.POST, instance=usuario_obj)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('perfil')  # ou alguma mensagem de sucesso
+#     else:
+#         form = UsuarioUpdateForm(instance=usuario_obj)
+
+#     return render(request, 'usuarios/perfil.html', {'form': form})
+
+#     return render(request, 'perfil.html', {
+#         'usuario': Usuario
+#         })
+
+
 
 class MeuLoginView(LoginView):
     template_name = 'login.html'
