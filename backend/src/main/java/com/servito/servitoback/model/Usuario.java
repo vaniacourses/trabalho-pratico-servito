@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
@@ -42,10 +43,23 @@ public class Usuario implements Cadastro{
 
   private Boolean isBanned = false;
 
+//  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+//  private List<Anuncio> anuncios;
+
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "historico_id", referencedColumnName = "id")
+  private Historico historico;
+
+//  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+//  private List<Certificado> certificados;
+
+//  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+//  private List<Avaliacao> avaliacoesRecebidas;
+
   public Usuario() {
   }
 
-  public Usuario(Long id, String nome, String email, String senha, String telefone, String documento, String endereco, String cidade, Date dataCadastro, Date dataNascimento) {
+  public Usuario(Long id, String nome, String email, String senha, String telefone, String documento, String endereco, String cidade, Date dataCadastro, Date dataNascimento, Historico historico) {
     this.id = id;
     this.nome = nome;
     this.email = email;
@@ -56,6 +70,7 @@ public class Usuario implements Cadastro{
     this.cidade = cidade;
     this.dataCadastro = dataCadastro;
     this.dataNascimento = dataNascimento;
+    this.historico =  historico;
   }
 
   @Override
@@ -156,6 +171,18 @@ public class Usuario implements Cadastro{
 
   public void setBanned(Boolean banned) {
     this.isBanned = banned;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Historico getHistorico() {
+    return historico;
+  }
+
+  public void setHistorico(Historico historico) {
+    this.historico = historico;
   }
 }
 
