@@ -49,3 +49,18 @@
         a.voltar:hover {
             text-decoration: underline;
         }
+
+        a.contratar {
+            display: block;
+            margin-top: 2em;
+            color: #F2C438;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: right;
+        }
+
+.botoes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em; /* Espaço em cima da linha de botões */
+}

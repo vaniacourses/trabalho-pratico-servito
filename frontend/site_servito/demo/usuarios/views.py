@@ -172,6 +172,16 @@ def teste_sessao(request):
         request.session['visitas'] = 1
     return HttpResponse(f"Visitas: {request.session['visitas']}")
 
+def contratacao(request, id):
+    strategy = get_strategy()
+    anuncio = strategy.get_single(Anuncio, id)
+
+    return render(request, "contratacao.html", {"anuncio": anuncio})
+
+def avaliar_contratacao(request):
+    return redirect('contratacao')
+
+
 
 
 

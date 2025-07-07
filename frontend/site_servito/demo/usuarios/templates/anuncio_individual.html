@@ -22,8 +22,10 @@
             <p><strong>Email:</strong> {{ anuncio.usuario.email }}</p>
             <p><strong>Telefone:</strong> {{ anuncio.usuario.telefone }}</p>
         </div>
-
-        <a class="voltar" href="{% url 'anuncios' %}">← Voltar para anúncios</a>
+        <div class ="botoes">
+            <a class="voltar" href="{% url 'anuncios' %}">← Voltar para anúncios</a>
+            <a class="contratar" href="{% url 'contratacao' anuncio.id %}">Contratar</a>
+        </div>
     </div>
 </body>
 </html>
