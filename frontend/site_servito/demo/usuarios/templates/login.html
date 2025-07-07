@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - Servito</title>
-    <link href="{% static 'css/form.css' %}" rel="stylesheet">
+    <link href="{% static 'css/forms.css' %}" rel="stylesheet">
 </head>
 <body>
+    {% include "header.html" %} 
 <div class="form-container">
     {% if error %}
     <p style="color:red;">{{ error }}</p>

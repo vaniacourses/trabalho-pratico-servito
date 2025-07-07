@@ -1,11 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>página de certificados</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meus Certificados{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/certificados.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Meus Certificados</h2>
+
+    {% if certificados %}
+        {% for c in certificados %}
+            <div class="certificado">
+                <p><strong>Título:</strong> {{ c.titulo }}</p>
+                <p><strong>Instituição:</strong> {{ c.insituicao }}</p>
+                <p><strong>Data:</strong> {{ c.data }}</p>
+                <p><strong>Link:</strong> <a href="{{ c.link }}" target="_blank">{{ c.link }}</a></p>
+                <p class="status {% if c.pendente %}pendente{% elif c.aprovado %}aprovado{% endif %}">
+                    <strong>Status:</strong>
+                    {% if c.pendente %}
+                        Pendente
+                    {% elif c.aprovado %}
+                        Aprovado
+                    {% else %}
+                        Rejeitado
+                    {% endif %}
+                </p>
+
+                <form method="POST" action="{% url 'excluir_certificado' c.id %}" style="margin-top: 1em;">
+                    {% csrf_token %}
+                    <button type="submit" class="botao-excluir">Excluir</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Você ainda não enviou certificados.</p>
+    {% endif %}
+</div>
+{% endblock %}

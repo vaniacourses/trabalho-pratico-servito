@@ -1,8 +1,9 @@
-:root {
+     :root {
     --azul: #2b6777;
     --amarelo: #F2C438;
     --cinza-claro: #f2f2f2;
-    --fundo: #ffffff;
+    --branco: #ffffff;
+    --borda: #ddd;
 }
 
 body {
@@ -10,26 +11,21 @@ body {
     background-color: var(--cinza-claro);
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    min-height: 100vh;
 }
 
 .form-container {
-    background-color: var(--fundo);
-    margin: 3em 1em;
+    background-color: var(--branco);
+    max-width: 600px;
+    margin: 3em auto;
     padding: 2em;
     border-radius: 10px;
-    max-width: 600px;
-    width: 100%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-container h1 {
-    color: var(--azul);
-    margin-bottom: 1em;
     text-align: center;
+    color: var(--azul);
+    margin-bottom: 1.5em;
 }
 
 .form-group {
@@ -38,23 +34,27 @@ body {
 
 .form-group label {
     display: block;
-    margin-bottom: 0.4em;
+    margin-bottom: 0.5em;
     font-weight: bold;
     color: var(--azul);
 }
 
-.input-field {
+.form-group input,
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 0.6em;
-    border: 2px solid var(--azul);
-    border-radius: 6px;
     font-size: 1em;
-    background-color: white;
+    border: 1px solid var(--borda);
+    border-radius: 6px;
+    background-color: var(--branco);
 }
 
-.input-field:focus {
-    outline: none;
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
     border-color: var(--amarelo);
+    outline: none;
     box-shadow: 0 0 3px var(--amarelo);
 }
 
@@ -65,15 +65,16 @@ body {
 }
 
 button[type="submit"] {
+    width: 100%;
     background-color: var(--azul);
     color: white;
-    border: none;
     padding: 0.8em 1.2em;
     font-size: 1em;
+    font-weight: bold;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    width: 100%;
 }
 
 button[type="submit"]:hover {

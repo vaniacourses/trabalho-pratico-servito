@@ -1,0 +1,23 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<header>    
+    <h1>Servito</h1>
+    <nav>
+        {% if usuario_logado %}
+            <a href="{% url 'anuncios' %}">Anuncios</a>
+            <a href="{% url 'pendentes' %}">Contratações Pendentes</a>
+            <a href="{% url 'historico' %}">Histórico</a>
+            <a href="{% url 'certificados' %}">Meus Certificados</a>
+            <a href="{% url 'adicionar_certificado' %}">Adicionar certificado</a>
+            <a href="{% url 'perfil' request.session.id %}">Perfil</a>
+            <a href="{% url 'logout' %}">Sair</a>
+            
+
+        {% else %}
+            <a href="{% url 'login' %}">Entrar</a>
+            <a href="{% url 'cadastro' %}">Cadastrar</a>
+        {% endif %}
+
+    </nav>
+</header>

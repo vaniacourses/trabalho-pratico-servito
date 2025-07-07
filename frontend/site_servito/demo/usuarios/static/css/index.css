@@ -18,26 +18,7 @@ html, body {
     flex-direction: column;
 }
 
-header {
-    background-color: var(--azul-principal);
-    color: var(--branco);
-    padding: 1em 2em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
 
-header h1 {
-    margin: 0;
-}
-
-header nav a {
-    color: var(--amarelo-destaque);
-    margin-left: 1em;
-    text-decoration: none;
-    font-weight: bold;
-}
 
 .intro {
     background-color: var(--cinza-fundo);
