@@ -106,7 +106,7 @@ def login_simples(request):
         #TODO usar o strategy aqui
         # Verifica se é adm
         try:
-            adm = strategy.get_object_by_fields(Adm, {"email": email, "senha": senha})
+            adm = strategy.get_list(Adm, {"email": email, "senha": senha})
             request.session['email'] = adm.email
             request.session['id'] = adm.id
             return redirect("/certificadosPendentes/")
@@ -115,7 +115,7 @@ def login_simples(request):
 
         # Verifica se é usuario
         try:
-            usuario = strategy.get_object_by_fields(Usuario, {"email": email, "senha": senha})
+            usuario = strategy.get_list(Usuario, {"email": email, "senha": senha})
             request.session['email'] = usuario.email
             request.session['id'] = usuario.id
             return redirect("/index/")
