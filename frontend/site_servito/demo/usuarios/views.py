@@ -29,10 +29,10 @@ class UsuarioController:
         if cls._instance is None:
             cls._instance = super(UsuarioController, cls).__new__(cls)
         return cls._instance
-    def cadastro(request):
+    def cadastro(self, request):
         return render(request, "cadastro.html")
 
-    def createUsuario(request):
+    def createUsuario(self, request):
         if request.method == 'POST':
             form = UsuarioForm(request.POST)
             if form.is_valid():

@@ -3,6 +3,8 @@ from .views import UsuarioController, LoginController, PerfilController
 from .views_contratacao import ContratacaoController
 from .views_certificados import CertificadoController
 from .views_anuncios import AnuncioController, Caretaker
+from django.contrib import admin
+
 
 contratacao_controller = ContratacaoController()
 anuncio_controller = AnuncioController()
@@ -14,7 +16,7 @@ caretaker = Caretaker()
 
 urlpatterns = [
     #path('logout/', auth_views.LogoutView.as_view(next_page='welcome'), name='logout'),
-
+    path('admin/', admin.site.urls),
     path('anuncios/', anuncio_controller.getAnuncios, name='anuncios'),
     path('meus_anuncios/', anuncio_controller.getMeusAnuncios, name='meus_anuncios'),
     path('anuncio_edicao/<int:id>/', anuncio_controller.getMeuAnuncioById, name='anuncio_edicao'),
