@@ -1,8 +1,8 @@
 from django.urls import path
 from .views import index, cadastro_usuario,login_simples, logout_simples, perfil
-from .views_contratacao import contratar, avaliar_contratacao, get_pendentes, get_contratacoes, get_contratacao_by_id, get_pendente_by_id, aceitar_contratacao, recusar_contratacao, criar_contratacao
+from .views_contratacao import contratar, avaliar_contratacao, get_pendentes, get_contratacoes, get_contratacao_by_id, get_pendente_by_id, aceitar_contratacao, recusar_contratacao, criar_contratacao, finalizar_contratacao
 from .views_certificados import get_certificados, adicionar_certificado
-from .views_anuncios import anuncios,get_anuncios,get_anuncio_by_id, anuncio_edicao, anuncio_exclusao, criar_anuncio, get_meus_anuncios, get_meu_anuncio_by_id
+from .views_anuncios import anuncios,get_anuncios,get_anuncio_by_id, anuncio_edicao, anuncio_exclusao, criar_anuncio, get_meus_anuncios, get_meu_anuncio_by_id, Caretaker
 
 urlpatterns = [
     #path('logout/', auth_views.LogoutView.as_view(next_page='welcome'), name='logout'),
@@ -23,13 +23,17 @@ urlpatterns = [
     path('contratacao/<int:id>/', get_contratacao_by_id, name='contratacao'),
     path('pendentes/', get_pendentes, name='pendentes'),
     path('pendente/<int:id>/', get_pendente_by_id, name='pendente'),
-    path('historico/', get_contratacoes, name='historico'),
+    path('historico/<int:finalizado>', get_contratacoes, name='historico'),
     path('contratacao/<int:contratacao_id>/aceitar/', aceitar_contratacao, name='aceitar_contratacao'),
     path('contratacao/<int:contratacao_id>/recusar/', recusar_contratacao, name='recusar_contratacao'),
     path('certificados/', get_certificados, name = "certificados"),
     path('adicionar_certificado/', adicionar_certificado, name="adicionar_certificado"),
     path('perfil/<int:id>', perfil, name="perfil"),
-    path('contratar/<int:id>/', criar_contratacao, name='contratar')
+    path('contratar/<int:id>/', criar_contratacao, name='criar_contratacao'),
+    path('anuncio/<int:anuncio_id>/versoes/', Caretaker.listar_versoes_anuncio, name='listar_versoes_anuncio'),
+    path('anuncio/<int:anuncio_id>/restaurar/<int:snapshot_id>/', Caretaker.restaurar_anuncio, name='restaurar_anuncio'),
+    path('contratacao/<int:contratacao_id>/finalizar/', finalizar_contratacao, name='finalizar_contratacao')
+
 
     #F2C438
 ]   

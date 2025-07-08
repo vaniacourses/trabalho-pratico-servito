@@ -35,6 +35,7 @@
         <button type="submit" class="voltar" onclick="return confirm('Tem certeza que quer excluir?');">Excluir</button>
     </form>
     <a class="voltar" href="{% url 'meus_anuncios' %}">Cancelar</a>
+    <a href="{% url 'listar_versoes_anuncio' anuncio.id %}">Ver versões anteriores</a>
         
 </div>
 </body>

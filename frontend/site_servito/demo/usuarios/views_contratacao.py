@@ -14,6 +14,7 @@ from django.views import View
 from django.contrib.auth.views import LogoutView
 from .models import Anuncio, Adm, Usuario, Contratacao, Certificado
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
@@ -60,9 +61,11 @@ def get_pendente_by_id(request, id):
         'pendente': pendente
         })
 
-def get_contratacoes(request):
+def get_contratacoes(request, finalizado = 0):
+    finalizado = bool(finalizado)
     strategy = get_strategy()
     email_logado = request.session.get('email')
+    usuario = strategy.get_list(Usuario, {'email': email_logado})[0]
     if not email_logado:
         return render(request, 'index.html')
     filters_1 = {
@@ -74,9 +77,7 @@ def get_contratacoes(request):
         'prestador__email': email_logado
     }
     query = request.GET.get('q', '')
-    contratacoes_list_1 = strategy.get_list(Contratacao, filters_1)
-    contratacoes_list_2 = strategy.get_list(Contratacao, filters_2)
-    contratacoes_list = list(set(contratacoes_list_1) | set(contratacoes_list_2))
+    contratacoes_list = usuario.historico(finalizado)
     if query:
         contratacoes_list = [a for a in contratacoes_list if query.lower() in a.titulo.lower() 
                          or query.lower() in a.descricao.lower() 
@@ -90,7 +91,8 @@ def get_contratacoes(request):
     return render(request, 'historico.html', {
         'page_obj': page_obj,
         'query': query,  
-        'usuario_logado': 'email' in request.session
+        'usuario_logado': 'email' in request.session,
+        'finalizado': int(finalizado)
     })
 
 def get_contratacao_by_id(request, id):
@@ -148,3 +150,32 @@ def criar_contratacao(request, id):
         messages.success(request, "Anúncio criado com sucesso!")
         return redirect('anuncios')
     return render(request, 'contratar.html', {'anuncio': anuncio})
+
+def finalizar_contratacao(request, contratacao_id):
+    strategy = get_strategy()
+    contratacao = strategy.get_single(Contratacao, contratacao_id)
+
+    email_logado = request.session.get('email')
+
+    if not email_logado:
+        messages.error(request, "Você precisa estar logado para finalizar uma contratação.")
+        return redirect('login')
+
+    
+    if email_logado != contratacao.prestador.email:
+        messages.error(request, "Você não tem permissão para finalizar esta contratação.")
+        return redirect('contratacao', id=contratacao_id)
+
+    if not contratacao.aceito:
+        messages.error(request, "A contratação ainda não foi aceita.")
+        return redirect('contratacao', id=contratacao_id)
+
+    if contratacao.finalizado:
+        messages.info(request, "Esta contratação já foi finalizada.")
+        return redirect('contratacao', id=contratacao_id)
+
+    contratacao.finalizado = True
+    strategy.post(contratacao)
+
+    messages.success(request, "Contratação finalizada com sucesso.")
+    return redirect('contratacao', id=contratacao_id)

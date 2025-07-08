@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Histórico de versões do anúncio: "{{ anuncio.titulo }}"</h2>
+
+    {% if snapshots %}
+        <div class="list-group">
+            {% for snapshot in snapshots %}
+                <div class="list-group-item mb-3">
+                    <h5 class="mb-1">Versão de: {{ snapshot.criado_em|date:"d/m/Y H:i" }}</h5>
+                    
+                    <p><strong>Título:</strong> {{ snapshot.titulo }}</p>
+                    <p><strong>Descrição:</strong> {{ snapshot.descricao|truncatewords:20 }}</p>
+                    <p><strong>Tags:</strong> {{ snapshot.tags }}</p>
+                    <p><strong>Cidade:</strong> {{ snapshot.cidade }}</p>
+
+                    <form method="post" action="{% url 'restaurar_anuncio' anuncio.id snapshot.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-warning">🔄 Restaurar esta versão</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Este anúncio ainda não possui versões salvas.</p>
+    {% endif %}
+
+    <a href="{% url 'meus_anuncios' %}" class="btn btn-secondary mt-4">Voltar</a>
+</div>
+{% endblock %}

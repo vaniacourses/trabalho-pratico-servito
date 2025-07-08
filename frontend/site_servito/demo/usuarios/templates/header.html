@@ -7,7 +7,7 @@
         {% if usuario_logado %}
             <a href="{% url 'anuncios' %}">Anuncios</a>
             <a href="{% url 'pendentes' %}">Contratações Pendentes</a>
-            <a href="{% url 'historico' %}">Histórico</a>
+            <a href="{% url 'historico' 1 %}">Histórico</a>
             <a href="{% url 'certificados' %}">Meus Certificados</a>
             <a href="{% url 'meus_anuncios' %}">Meus Anúncios</a>
             <a href="{% url 'adicionar_certificado' %}">Adicionar certificado</a>

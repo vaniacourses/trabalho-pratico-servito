@@ -66,7 +66,7 @@ def cadastro_usuario(request):
 #         })
 
 
-
+'''
 class MeuLoginView(LoginView):
     template_name = 'login.html'
 
@@ -85,7 +85,7 @@ class MeuLoginView(LoginView):
                 form.add_error(None, 'E-mail ou senha inválidos.')
 
         return render(request, 'login.html', {'form': form})
-
+'''
 '''
 class MeuLogoutView(View):
     def get(self, request):
@@ -102,27 +102,26 @@ def login_simples(request):
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data["email"]
         senha = form.cleaned_data["senha"]
-        
-        #TODO usar o strategy aqui
+
         # Verifica se é adm
-        try:
-            adm = strategy.get_list(Adm, {"email": email, "senha": senha})
+        adm = strategy.get_list(Adm, {"email": email, "senha": senha}).first()
+        if adm is not None:
             request.session['email'] = adm.email
             request.session['id'] = adm.id
             return redirect("/certificadosPendentes/")
-        except Adm.DoesNotExist:    
-            pass
 
         # Verifica se é usuario
-        try:
-            usuario = strategy.get_list(Usuario, {"email": email, "senha": senha})
+        usuario = strategy.get_list(Usuario, {"email": email, "senha": senha}).first()
+        if usuario is not None:
             request.session['email'] = usuario.email
             request.session['id'] = usuario.id
             return redirect("/index/")
-        except Usuario.DoesNotExist:
-            error = "Credenciais inválidas."
+
+        # Se nenhum dos dois achou
+        error = "Credenciais inválidas."
 
     return render(request, "login.html", {"form": form, "error": error})
+
 
 def logout_simples(request):
     request.session.flush()

@@ -16,6 +16,57 @@ from django.contrib.auth.views import LogoutView
 from .models import Adm, Usuario, Contratacao, Certificado
 from django.contrib import messages
 
+
+class Caretaker:
+    def atualizar_anuncio(request, anuncio_id):
+        strategy = get_strategy()
+        anuncio = strategy.get_single(Anuncio, anuncio_id)
+        email_logado = request.session.get('email')
+        if not email_logado or anuncio.usuario.email != email_logado:
+            return redirect('meus_anuncios')
+
+        if request.method == 'POST':
+            # Antes de alterar, cria o backup (makeBackup)
+            anuncio.criar_snapshot()
+
+            anuncio.titulo = request.POST.get('titulo')
+            anuncio.descricao = request.POST.get('descricao')
+            anuncio.tags = request.POST.get('tags')
+            anuncio.cidade = request.POST.get('cidade')
+            strategy.post(anuncio)
+
+            messages.success(request, "Anúncio atualizado e snapshot criado.")
+            return redirect('meus_anuncios')
+
+        return render(request, 'editar_anuncio.html', {'anuncio': anuncio})
+
+    def restaurar_anuncio(request, anuncio_id, snapshot_id):
+        strategy = get_strategy()
+        anuncio = strategy.get_single(Anuncio, anuncio_id)
+        snapshot = anuncio.snapshots.get(id=snapshot_id)
+        email_logado = request.session.get('email')
+        if not email_logado or anuncio.usuario.email != email_logado:
+            return redirect('meus_anuncios')
+
+        snapshot.restaurar()  # restaura o estado no anuncio
+        messages.success(request, "Anúncio restaurado para versão anterior.")
+        return redirect('meus_anuncios')
+    
+    def listar_versoes_anuncio(request, anuncio_id):
+        strategy = get_strategy()
+        anuncio = strategy.get_single(Anuncio, anuncio_id)
+
+        email_logado = request.session.get('email')
+        if not email_logado or anuncio.usuario.email != email_logado:
+            return redirect('meus_anuncios')
+
+        snapshots = anuncio.snapshots.all().order_by('-criado_em')
+        return render(request, 'listar_snapshots.html', {
+            'anuncio': anuncio,
+            'snapshots': snapshots
+        })
+
+
 def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
 
@@ -96,18 +147,17 @@ def anuncio_edicao(request, anuncio_id):
     
 
     if request.method == 'POST':
-        
-        titulo = request.POST.get('titulo')
-        tags = request.POST.get('tags')
-        cidade = request.POST.get('cidade')
-        descricao = request.POST.get('descricao')
 
-        
-        anuncio.titulo = titulo
-        anuncio.tags = tags
-        anuncio.cidade = cidade
-        anuncio.descricao = descricao
+        anuncio.criar_snapshot()
+
+        anuncio.titulo = request.POST.get('titulo')
+        anuncio.tags = request.POST.get('tags')
+        anuncio.cidade = request.POST.get('cidade')
+        anuncio.descricao = request.POST.get('descricao')
+
         strategy.post(anuncio)
+
+        messages.success(request, "Anúncio atualizado com sucesso!")
 
         return redirect('meus_anuncios')  
 

@@ -23,8 +23,14 @@
             <p><strong>Telefone:</strong> {{ contratacao.contratante.telefone }}</p>
         </div>
         <div class ="botoes">
-            <a class="voltar" href="{% url 'historico' %}">← Voltar para histórico</a>
+            <a class="voltar" href="{% url 'historico' 1%}">← Voltar para histórico</a>
         </div>
+        {% if request.session.email == contratacao.prestador.email and not contratacao.finalizado and contratacao.aceito %}
+        <form method="post" action="{% url 'finalizar_contratacao' contratacao.id %}">
+            {% csrf_token %}
+            <button type="submit" class="botao-finalizar">Finalizar Contratação</button>
+        </form>
+{% endif %}
     </div>
 </body>
 </html>

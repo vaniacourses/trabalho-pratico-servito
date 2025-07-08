@@ -20,22 +20,58 @@ class Cadastro(models.Model):
 class Usuario(Cadastro):
     data_nascimento = models.DateField()
     is_banned = models.BooleanField(default = False)
-    #related anuncios
-    #related contratacoes
+
+    def historico(self, finalizado = True):
+        como_contratante = set(self.contratante.filter(finalizado=finalizado))
+        como_prestador = set(self.prestador.filter(finalizado=finalizado))
+        return list(como_contratante | como_prestador)
+
 
 class Adm(Cadastro):
     cargo = models.CharField(max_length=64)
+
+class AnuncioSnapshot(models.Model):
+    anuncio = models.ForeignKey('Anuncio', on_delete=models.CASCADE, related_name='snapshots')
+    titulo = models.CharField(max_length=64)
+    descricao = models.CharField(max_length=1000)
+    tags = models.CharField(max_length=640)
+    cidade = models.CharField(max_length=64)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    def restaurar(self):
+        
+        self.anuncio.restaurar_snapshot(self)
+
+    def __str__(self):
+        return f"Snapshot de {self.anuncio.titulo} em {self.criado_em}"
+
 
 
 class Anuncio(models.Model):
     titulo = models.CharField(max_length=64, verbose_name="Título")
     descricao = models.CharField(max_length=1000, verbose_name="Descrição")
-    #TODO deixar array com o pós postgree
-    #tags = ArrayField(models.CharField(max_length=50), blank=True, default=list)
     tags = models.CharField(max_length=640)
     cidade = models.CharField(max_length=64)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='anuncios')
-    #related: contratacoes
+    ultima_atualizacao = models.DateTimeField(auto_now=True)
+
+    def criar_snapshot(self):
+        return AnuncioSnapshot.objects.create(
+            anuncio=self,
+            titulo=self.titulo,
+            descricao=self.descricao,
+            tags=self.tags,
+            cidade=self.cidade
+        )
+    
+    def restaurar_snapshot(self, snapshot: 'AnuncioSnapshot'):
+        
+        if snapshot.anuncio != self:
+            raise ValueError("Snapshot não pertence a este anúncio.")
+        self.titulo = snapshot.titulo
+        self.descricao = snapshot.descricao
+        self.tags = snapshot.tags
+        self.cidade = snapshot.cidade
+        self.save()
 
 class Contratacao(models.Model):
     preco = models.IntegerField(verbose_name="Preço", null=True)
@@ -52,7 +88,7 @@ class Contratacao(models.Model):
 
 class Certificado(models.Model):
     titulo = models.CharField(max_length=100, verbose_name="Título")
-    insituicao = models.CharField(max_length=100, verbose_name="Instituição")
+    instituicao = models.CharField(max_length=100, verbose_name="Instituição")
     data = models.DateField()
     link = models.CharField(max_length=1000)
     pendente = models.BooleanField()
