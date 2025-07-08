@@ -51,7 +51,7 @@ public class CertificadoService {
     }
   }
 
-  public List<Certificado> solicitaCertificadosPendentes() {
+  public List<Certificado> getCertificadosPendentes() {
     List<Certificado> certificadosPendentes = certificadoRepository.findAll();
     certificadosPendentes.removeIf(certificado -> !certificado.getPendente());
     if (certificadosPendentes.isEmpty()) {
