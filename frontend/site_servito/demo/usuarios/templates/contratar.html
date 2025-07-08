@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'css/contratacao.css' %}" rel="stylesheet">
 </head>
+{% include "header.html" %} 
 <body>
     <div class="container">
         <h1>{{ anuncio.titulo }}</h1>
@@ -19,7 +20,8 @@
                 <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
             </div>
             <div class="item_informacoes_contrato">
-                <form id="contratacaoForm">
+                <form id="contratacaoForm" method="post" action="{% url 'criar_contratacao' anuncio.id %}">
+                    {% csrf_token %}
                     <label>Data do serviço</label>
                     <input type="date" id="data" name="data" required>
 

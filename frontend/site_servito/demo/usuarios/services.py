@@ -4,35 +4,35 @@ from django.shortcuts import get_object_or_404
 
 class RequestStrategy(ABC):
     @abstractmethod
-    def get_list(self, model_class, filters: dict = None):
+    def get_list(self, instance, filters: dict = None):
         pass
 
     @abstractmethod
-    def get_single(self, model_class, id):
+    def get_single(self, instance, id):
         pass
 
     @abstractmethod
-    def post(self, model_class):
+    def post(self, instance):
         pass
 
     @abstractmethod
-    def delete(self, model_class):
+    def delete(self, instance):
         pass
 
 class DjangoStrategy(RequestStrategy):
-    def get_list(self, model_class, filters=None):
+    def get_list(self, instance, filters=None):
         if filters:
-            return model_class.objects.filter(**filters)
-        return model_class.objects.all()
+            return instance.objects.filter(**filters)
+        return instance.objects.all()
     
-    def get_single(self, model_class, id):
-        return get_object_or_404(model_class, pk=id)
+    def get_single(self, instance, id):
+        return get_object_or_404(instance, pk=id)
 
-    def post(self, model_class):
-        model_class.save()
+    def post(self, instance):
+        instance.save()
 
-    def delete(self, model_class):
-        model_class.delete()
+    def delete(self, instance):
+        instance.delete()
 
 class ApiStrategy(RequestStrategy):
     #TODO implementar quando estiver pronto
@@ -43,6 +43,7 @@ class ApiStrategy(RequestStrategy):
     
     def get_single(self, model_class, id):
         pass
+
 
     def post(self, instance):
         pass

@@ -1,25 +1,25 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Cadastro - Servito{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/anuncios.css' %}">
-{% endblock %}
-
-{% block content %}
-
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus Anúncios - Servito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/anuncios.css' %}" rel="stylesheet">
+</head>
+<body>
+{% include "header.html" %} 
     <div class="container">
         <h1>Todos os Anúncios</h1>
 
-        <form method="get" action="{% url 'anuncios' %}" class="search-form">
-            <input type="text" name="q" placeholder="Pesquisar anúncios..." value="{{ request.GET.q }}">
+        <form method="get" action="{% url 'meus_anuncios' %}" class="search-form">
+            <input type="text" name="q" placeholder="Pesquisar seus anúncios..." value="{{ request.GET.q }}">
             <button type="submit">Buscar</button>
         </form>
 
         <div class="grid">
             {% for anuncio in page_obj %}
-            <a href="{% url 'anuncio' anuncio.id %}" class="card-link" >
+            <a href="{% url 'anuncio_edicao' anuncio.id %}" class="card-link" >
                 <div class="card">
                     <h3>{{ anuncio.titulo }}</h3>
                     <p>{{ anuncio.descricao|truncatewords:24 }}</p>
@@ -54,4 +54,6 @@
             {% endif %}
         </div>
     </div>
-{% endblock %}
+    <a href="{% url 'criar_anuncio' %}" class="botao-criar-anuncio">Criar Novo Anúncio</a>
+</body>
+</html>

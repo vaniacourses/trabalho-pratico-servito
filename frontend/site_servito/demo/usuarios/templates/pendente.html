@@ -8,6 +8,7 @@
     <link href="{% static 'css/anuncio_individual.css' %}" rel="stylesheet">
 </head>
 <body>
+    {% include "header.html" %} 
     <div class="container">
         <h1>{{ pendente.id }}</h1>
         <p class="tags">Preco: {{ pendente.preco }}</p>

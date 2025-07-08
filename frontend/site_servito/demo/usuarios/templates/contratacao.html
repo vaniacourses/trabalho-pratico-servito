@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ contratacao.id }} - Servito</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/anuncio_individual.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ contratacao.prazo }}</h1>
+        <p class="tags">Preco: {{ contratacao.preco }}</p>
+        <p class="cidade">Prazo: {{ contratacao.prazo }}</p>
+        <div class="descricao">
+            <p>{{ contratacao.descricao }}</p>
+        </div>
+
+        <div class="contato">
+            <h3>Contato do Contratante</h3>
+            <p><strong>Nome:</strong> {{ contratacao.contratante.nome }}</p>
+            <p><strong>Email:</strong> {{ contratacao.contratante.email }}</p>
+            <p><strong>Telefone:</strong> {{ contratacao.contratante.telefone }}</p>
+        </div>
+        <div class ="botoes">
+            <a class="voltar" href="{% url 'historico' 1%}">← Voltar para histórico</a>
+        </div>
+        {% if request.session.email == contratacao.prestador.email and not contratacao.finalizado and contratacao.aceito %}
+        <form method="post" action="{% url 'finalizar_contratacao' contratacao.id %}">
+            {% csrf_token %}
+            <button type="submit" class="botao-finalizar">Finalizar Contratação</button>
+        </form>
+{% endif %}
+    </div>
+</body>
+</html>

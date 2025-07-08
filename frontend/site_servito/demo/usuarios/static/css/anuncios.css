@@ -119,3 +119,18 @@ h1 {
 .search-form button:hover {
     background-color: #2b6777;
 }
+
+.btn {
+    padding: 8px 16px;
+    background-color: #ddd;
+    color: black;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.btn-ativo {
+    background-color: #4CAF50; /* verde */
+    color: white;
+}
+

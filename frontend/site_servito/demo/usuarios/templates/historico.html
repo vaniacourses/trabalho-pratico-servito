@@ -7,55 +7,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'css/anuncios.css' %}" rel="stylesheet">
 </head>
+{% include "header.html" %}
 <body>
-    <div class="container">
-        <h1>Histórico de Contratações</h1>
+<div class="container">
+    <h1>Histórico de Contratações</h1>
 
-        <form method="get" action="{% url 'historico' %}" class="search-form">
-            <input type="text" name="q" placeholder="Pesquisar Contratações..." value="{{ request.GET.q }}">
-            <button type="submit">Buscar</button>
-        </form>
-
-        <div class="grid">
-            {% for contratacao in page_obj %}
-            <a href="{% url 'contratacao' contratacao.id %}" class="card-link" >
-                <div class="card">
-                    <h3>{{ contratacao.prazo }}</h3>
-                    <p><strong>Preço:</strong> {{ contratacao.Preco }}</p>
-                    <p><strong>Prazo:</strong> {{ contratacao.descricao }}</p>
-                    <p><strong>Finalizado:</strong> {{ contratacao.descricao }}</p>
-                    <p><strong>Prazo:</strong> {{ contratacao.descricao }}</p>
-                    <p><strong>Prestador:</strong> {{ contratacao.descricao }}</p>
-                    <p><strong>Contratante:</strong> {{ contratacao.descricao }}</p>
-                    <p><strong>Descrição:</strong> {{ contratacao.descricao }}</p>
-                </div>
-            </a>
-            {% empty %}
-                <p>Nenhuma contratação encontrada.</p>
-            {% endfor %}
-        </div>
-
-        <div class="paginacao">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">← Anterior</a>
-            {% else %}
-                <span class="disabled">← Anterior</span>
-            {% endif %}
-
-            {% for page_num in page_obj.paginator.page_range %}
-                {% if page_num == page_obj.number %}
-                    <span class="current">{{ page_num }}</span>
-                {% else %}
-                    <a href="?page={{ page_num }}">{{ page_num }}</a>
-                {% endif %}
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Próxima →</a>
-            {% else %}
-                <span class="disabled">Próxima →</span>
-            {% endif %}
-        </div>
+    <!-- Botões para filtro finalizado / em andamento -->
+    <div class="filtro-finalizado">
+        <a href="{% url 'historico' 1 %}" class="btn {% if finalizado %}btn-ativo{% endif %}">Finalizados</a>
+        <a href="{% url 'historico' 0 %}" class="btn {% if not finalizado %}btn-ativo{% endif %}">Em andamento</a>
     </div>
+
+    <form method="get" action="{% url 'historico' finalizado %}" class="search-form">
+        <input type="text" name="q" placeholder="Pesquisar Contratações..." value="{{ query }}">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div class="grid">
+        {% for contratacao in page_obj %}
+        <a href="{% url 'contratacao' contratacao.id %}" class="card-link" >
+            <div class="card">
+                <h3>{{ contratacao.prazo }}</h3>
+                <p><strong>Preço:</strong> {{ contratacao.preco }}</p>
+                <p><strong>Prazo:</strong> {{ contratacao.prazo }}</p>
+                <p><strong>Finalizado:</strong> {{ contratacao.finalizado }}</p>
+                <p><strong>Prestador:</strong> {{ contratacao.prestador.nome }}</p>
+                <p><strong>Contratante:</strong> {{ contratacao.contratante.nome }}</p>
+                <p><strong>Descrição:</strong> {{ contratacao.descricao }}</p>
+            </div>
+        </a>
+        {% empty %}
+            <p>Nenhuma contratação encontrada.</p>
+        {% endfor %}
+    </div>
+
+    <div class="paginacao">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">← Anterior</a>
+        {% else %}
+            <span class="disabled">← Anterior</span>
+        {% endif %}
+
+        {% for page_num in page_obj.paginator.page_range %}
+            {% if page_num == page_obj.number %}
+                <span class="current">{{ page_num }}</span>
+            {% else %}
+                <a href="?page={{ page_num }}">{{ page_num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Próxima →</a>
+        {% else %}
+            <span class="disabled">Próxima →</span>
+        {% endif %}
+    </div>
+</div>
 </body>
 </html>
