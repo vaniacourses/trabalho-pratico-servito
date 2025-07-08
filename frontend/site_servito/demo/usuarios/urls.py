@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, home, cadastro_usuario, anuncios,get_anuncios,get_anuncio_by_id,login_simples, logout_simples, teste_sessao, contratar, avaliar_contratacao, get_pendentes, get_contratacoes, get_contratacao_by_id, get_pendente_by_id, aceitar_contratacao, recusar_contratacao, get_meus_anuncios, get_meu_anuncio_by_id, anuncio_edicao, anuncio_exclusao, criar_anuncio
+from .views import index, home, cadastro_usuario, anuncios,get_anuncios,get_anuncio_by_id,login_simples, logout_simples, teste_sessao, perfil, contratar, avaliar_contratacao, get_pendentes, get_contratacoes, get_contratacao_by_id, get_pendente_by_id, aceitar_contratacao, recusar_contratacao, get_meus_anuncios, get_meu_anuncio_by_id, anuncio_edicao, anuncio_exclusao, criar_anuncio, get_certificados, adicionar_certificado
 urlpatterns = [
     #path('logout/', auth_views.LogoutView.as_view(next_page='welcome'), name='logout'),
     path('', index, name='index'),
@@ -24,6 +24,9 @@ urlpatterns = [
     path('historico/', get_contratacoes, name='historico'),
     path('contratacao/<int:contratacao_id>/aceitar/', aceitar_contratacao, name='aceitar_contratacao'),
     path('contratacao/<int:contratacao_id>/recusar/', recusar_contratacao, name='recusar_contratacao'),
+    path('certificados/', get_certificados, name = "certificados"),
+    path('adicionar_certificado/', adicionar_certificado, name="adicionar_certificado"),
+    path('perfil/<int:id>', perfil, name="perfil")
 
 
     #F2C438

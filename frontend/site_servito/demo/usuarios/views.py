@@ -13,7 +13,7 @@ from .models import Anuncio, Usuario
 from django.contrib.auth.hashers import make_password
 from django.views import View
 from django.contrib.auth.views import LogoutView
-from .models import Adm, Usuario, Contratacao
+from .models import Adm, Usuario, Contratacao, Certificado
 from django.contrib import messages
 
 
@@ -415,7 +415,7 @@ def get_certificados(request):
     usuario_id = request.session.get('id')
     strategy = get_strategy()
     if not usuario_id:
-        return redirect('login')  # ou alguma página de erro
+        return redirect('login')  
     filter_1 = {
         'usuario_id': usuario_id
     }

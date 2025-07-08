@@ -9,24 +9,7 @@
 </head>
 
 <body>
-    <header>
-        <h1>Servito</h1>
-        <nav>
-            {% if usuario_logado %}
-                <a href="{% url 'anuncios' %}">Anuncios</a>
-                <a href="{% url 'pendentes' %}">Contratações Pendentes</a>
-                <a href="{% url 'historico' %}">Histórico</a>
-                 <a href="{% url 'meus_anuncios' %}">Meus Anuncios</a>
-                <a href="{% url 'logout' %}">Sair</a>
-                
-
-            {% else %}
-                <a href="{% url 'login' %}">Entrar</a>
-                <a href="{% url 'cadastro' %}">Cadastrar</a>
-            {% endif %}
-
-        </nav>
-    </header>
+{% include "header.html" %} 
 
     <div class="intro">
         <h2>Bem-vindo ao Servito!</h2>
