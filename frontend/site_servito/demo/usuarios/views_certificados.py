@@ -19,58 +19,66 @@ from django.contrib import messages
 def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
 
-def excluir_certificado(request, id):
-    if request.method == "POST":
+class CertificadoController:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(CertificadoController, cls).__new__(cls)
+        return cls._instance
+
+    def excluir_certificado(self,request, id):
+        if request.method == "POST":
+            strategy = get_strategy()
+            certificado = strategy.get_single(Certificado, id)
+            if certificado.usuario.id == request.session.get('id'):
+                strategy.delete(certificado)
+        return redirect('certificados')
+
+    def get_pending_certificados(self, request):
+        filters = {
+            'pendente': True,
+        }
         strategy = get_strategy()
-        certificado = strategy.get_single(Certificado, id)
-        if certificado.usuario.id == request.session.get('id'):
-            strategy.delete(certificado)
-    return redirect('certificados')
-
-def get_pending_certificados(request):
-    filters = {
-        'pendente': True,
-    }
-    strategy = get_strategy()
-    certificados = strategy.get_list(Certificado, filters)
-    return render(request, 'certificados_pendentes.html', {'certificados': certificados})
+        certificados = strategy.get_list(Certificado, filters)
+        return render(request, 'certificados_pendentes.html', {'certificados': certificados})
 
 
-#TODO mudar o diagrama de classes
-def avaliar_certificado(request, certificado_id, aprovar):
-    if request.method == 'POST':
-        strategy = get_strategy()
-        certificado = strategy.get_single(Certificado, certificado_id)
-        certificado.pendente = False 
-        certificado.aprovado = True if aprovar == 'aprovar' else False
-        #TODO mudar o strategy aqui
-        strategy.post(certificado)
-    return redirect('certificados_pendentes')
-
-def adicionar_certificado(request):
-    strategy = get_strategy()
-
-    if request.method == 'POST':
-        form = CertificadoForm(request.POST)
-        if form.is_valid():
-            certificado = form.save(commit=False)
-            certificado.usuario_id = request.session['id']
-            certificado.pendente = True
-            certificado.aprovado = False
+    #TODO mudar o diagrama de classes
+    def avaliar_certificado(self, request, certificado_id, aprovar):
+        if request.method == 'POST':
+            strategy = get_strategy()
+            certificado = strategy.get_single(Certificado, certificado_id)
+            certificado.pendente = False 
+            certificado.aprovado = True if aprovar == 'aprovar' else False
+            #TODO mudar o strategy aqui
             strategy.post(certificado)
-            return redirect('certificados', id=request.session['id'])
-    else:
-        form = CertificadoForm()
+        return redirect('certificados_pendentes')
 
-    return render(request, 'adicionar_certificado.html', {'form': form})
+    def adicionar_certificado(self, request):
+        strategy = get_strategy()
 
-def get_certificados(request):
-    usuario_id = request.session.get('id')
-    strategy = get_strategy()
-    if not usuario_id:
-        return redirect('login')  
-    filter_1 = {
-        'usuario_id': usuario_id
-    }
-    certificados = strategy.get_list(Certificado, filter_1)
-    return render(request, 'certificados.html', {'certificados': certificados})
+        if request.method == 'POST':
+            form = CertificadoForm(request.POST)
+            if form.is_valid():
+                certificado = form.save(commit=False)
+                certificado.usuario_id = request.session['id']
+                certificado.pendente = True
+                certificado.aprovado = False
+                strategy.post(certificado)
+                return redirect('certificados', id=request.session['id'])
+        else:
+            form = CertificadoForm()
+
+        return render(request, 'adicionar_certificado.html', {'form': form})
+
+    def get_certificados(self, request):
+        usuario_id = request.session.get('id')
+        strategy = get_strategy()
+        if not usuario_id:
+            return redirect('login')  
+        filter_1 = {
+            'usuario_id': usuario_id
+        }
+        certificados = strategy.get_list(Certificado, filter_1)
+        return render(request, 'certificados.html', {'certificados': certificados})

@@ -21,30 +21,31 @@ from django.contrib import messages
 def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
 
-def index(request):
-    if 'email' in request.session:
-        return render(request, 'index.html', {'usuario_logado': True})
-    else:
-        return render(request, 'index.html', {'usuario_logado': False})
 
+class CadastroController:
+    _instance = None
 
-def cadastro(request):
-    return render(request, "cadastro.html")
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(CadastroController, cls).__new__(cls)
+        return cls._instance
+    def cadastro(request):
+        return render(request, "cadastro.html")
 
-def cadastro_usuario(request):
-    if request.method == 'POST':
-        form = UsuarioForm(request.POST)
-        if form.is_valid():
-            usuario = form.save(commit=False)
-            usuario.data_cadastro = date.today()
-            usuario.is_banned =  False
-            usuario.senha = form.cleaned_data['senha']
-            strategy = get_strategy()
-            strategy.post(usuario)
-            return redirect('login')
-    else:
-        form = UsuarioForm()
-    return render(request, 'cadastro.html', {'form': form})
+    def cadastro_usuario(request):
+        if request.method == 'POST':
+            form = UsuarioForm(request.POST)
+            if form.is_valid():
+                usuario = form.save(commit=False)
+                usuario.data_cadastro = date.today()
+                usuario.is_banned =  False
+                usuario.senha = form.cleaned_data['senha']
+                strategy = get_strategy()
+                strategy.post(usuario)
+                return redirect('login')
+        else:
+            form = UsuarioForm()
+        return render(request, 'cadastro.html', {'form': form})
 
 
 # def get_user_by_id(request, id):
@@ -92,52 +93,59 @@ class MeuLogoutView(View):
         logout(request)
         return redirect('index') 
 '''
+class LoginController:
+    def login_simples(self, request):
+        strategy = get_strategy()
+        usuario = None
+        form = LoginForm(request.POST or None)
+        error = None
 
-def login_simples(request):
-    strategy = get_strategy()
-    usuario = None
-    form = LoginForm(request.POST or None)
-    error = None
+        if request.method == "POST" and form.is_valid():
+            email = form.cleaned_data["email"]
+            senha = form.cleaned_data["senha"]
 
-    if request.method == "POST" and form.is_valid():
-        email = form.cleaned_data["email"]
-        senha = form.cleaned_data["senha"]
+            # Verifica se é adm
+            adm = strategy.get_list(Adm, {"email": email, "senha": senha}).first()
+            if adm is not None:
+                request.session['email'] = adm.email
+                request.session['id'] = adm.id
+                return redirect("/certificadosPendentes/")
 
-        # Verifica se é adm
-        adm = strategy.get_list(Adm, {"email": email, "senha": senha}).first()
-        if adm is not None:
-            request.session['email'] = adm.email
-            request.session['id'] = adm.id
-            return redirect("/certificadosPendentes/")
+            # Verifica se é usuario
+            usuario = strategy.get_list(Usuario, {"email": email, "senha": senha}).first()
+            if usuario is not None:
+                request.session['email'] = usuario.email
+                request.session['id'] = usuario.id
+                return redirect("/index/")
 
-        # Verifica se é usuario
-        usuario = strategy.get_list(Usuario, {"email": email, "senha": senha}).first()
-        if usuario is not None:
-            request.session['email'] = usuario.email
-            request.session['id'] = usuario.id
-            return redirect("/index/")
+            # Se nenhum dos dois achou
+            error = "Credenciais inválidas."
 
-        # Se nenhum dos dois achou
-        error = "Credenciais inválidas."
-
-    return render(request, "login.html", {"form": form, "error": error})
+        return render(request, "login.html", {"form": form, "error": error})
 
 
-def logout_simples(request):
-    request.session.flush()
-    return redirect('index')  
+    def logout_simples(self, request):
+        request.session.flush()
+        return redirect('index')  
 
-def perfil(request, id):
-    strategy = get_strategy()
-    usuario = strategy.get_single(Usuario, id)
+    def index(self, request):
+        if 'email' in request.session:
+            return render(request, 'index.html', {'usuario_logado': True})
+        else:
+            return render(request, 'index.html', {'usuario_logado': False})
 
-    #TODO usar strategy aqui
-    if request.method == "POST":
-        form = UsuarioForm(request.POST, instance=usuario)
-        if form.is_valid():
-            strategy.post(form)
-            return redirect('perfil', id=usuario.id)  # redireciona para o próprio perfil
-    else:
-        form = UsuarioForm(instance=usuario)
+class PerfilController:
+    def perfil(self, request, id):
+        strategy = get_strategy()
+        usuario = strategy.get_single(Usuario, id)
 
-    return render(request, 'perfil.html', {'form': form})
+        #TODO usar strategy aqui
+        if request.method == "POST":
+            form = UsuarioForm(request.POST, instance=usuario)
+            if form.is_valid():
+                strategy.post(form)
+                return redirect('perfil', id=usuario.id)  # redireciona para o próprio perfil
+        else:
+            form = UsuarioForm(instance=usuario)
+
+        return render(request, 'perfil.html', {'form': form})
