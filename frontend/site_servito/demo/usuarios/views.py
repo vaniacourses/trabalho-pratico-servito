@@ -94,6 +94,7 @@ class MeuLogoutView(View):
 '''
 
 def login_simples(request):
+    strategy = get_strategy()
     usuario = None
     form = LoginForm(request.POST or None)
     error = None
@@ -105,7 +106,7 @@ def login_simples(request):
         #TODO usar o strategy aqui
         # Verifica se é adm
         try:
-            adm = Adm.objects.get(email=email, senha=senha)
+            adm = strategy.get_object_by_fields(Adm, {"email": email, "senha": senha})
             request.session['email'] = adm.email
             request.session['id'] = adm.id
             return redirect("/certificadosPendentes/")
@@ -114,7 +115,7 @@ def login_simples(request):
 
         # Verifica se é usuario
         try:
-            usuario = Usuario.objects.get(email=email, senha=senha)
+            usuario = strategy.get_object_by_fields(Usuario, {"email": email, "senha": senha})
             request.session['email'] = usuario.email
             request.session['id'] = usuario.id
             return redirect("/index/")

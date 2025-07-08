@@ -16,6 +16,10 @@ class RequestStrategy(ABC):
         pass
 
     @abstractmethod
+    def get_object_by_fields(self, model_class, filters):
+        pass
+
+    @abstractmethod
     def delete(self, instance):
         pass
 
@@ -27,6 +31,9 @@ class DjangoStrategy(RequestStrategy):
     
     def get_single(self, instance, id):
         return get_object_or_404(instance, pk=id)
+
+    def get_object_by_fields(self, model_class, filters):
+        return model_class.objects.get(**filters)
 
     def post(self, instance):
         instance.save()
@@ -42,6 +49,9 @@ class ApiStrategy(RequestStrategy):
         pass
     
     def get_single(self, model_class, id):
+        pass
+
+    def get_object_by_fields(self, mode_class, filters):
         pass
 
     def post(self, instance):
