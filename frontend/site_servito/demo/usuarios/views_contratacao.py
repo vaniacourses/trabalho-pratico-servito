@@ -15,6 +15,8 @@ from django.contrib.auth.views import LogoutView
 from .models import Anuncio, Adm, Usuario, Contratacao, Certificado
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
+from django.utils.decorators import method_decorator
 
 def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
@@ -111,7 +113,8 @@ class ContratacaoController:
             'contratacao': contratacao,
             'usuario_logado': 'email' in request.session
             })
-    
+            
+    @method_decorator(transaction.atomic)
     def aceitarContratacao(self, request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
@@ -120,6 +123,7 @@ class ContratacaoController:
         strategy.post(contratacao)
         return redirect('pendentes')
 
+    @method_decorator(transaction.atomic)
     def recusarContratacao(self, request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
@@ -128,6 +132,7 @@ class ContratacaoController:
         strategy.post(contratacao)
         return redirect('pendentes')
 
+    @method_decorator(transaction.atomic)
     def createContratacao(self, request, id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
@@ -161,6 +166,7 @@ class ContratacaoController:
             return redirect('anuncios')
         return render(request, 'contratar.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session,})
 
+    @method_decorator(transaction.atomic)
     def finalizarContratacao(self,request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
