@@ -15,6 +15,8 @@ from django.views import View
 from django.contrib.auth.views import LogoutView
 from .models import Adm, Usuario, Contratacao, Certificado
 from django.contrib import messages
+from django.db import transaction
+from django.utils.decorators import method_decorator
 
 def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
@@ -26,7 +28,8 @@ class CertificadoController:
         if cls._instance is None:
             cls._instance = super(CertificadoController, cls).__new__(cls)
         return cls._instance
-
+    
+    @method_decorator(transaction.atomic)
     def deleteCertificado(self,request, id):
         if request.method == "POST":
             strategy = get_strategy()
@@ -44,7 +47,7 @@ class CertificadoController:
         return render(request, 'certificados_pendentes.html', {'certificados': certificados, 'usuario_logado': 'email' in request.session})
 
 
-    #TODO mudar o diagrama de classes
+    @method_decorator(transaction.atomic)
     def validaCertificado(self, request, certificado_id, aprovar):
         if request.method == 'POST':
             strategy = get_strategy()
@@ -55,6 +58,7 @@ class CertificadoController:
             strategy.post(certificado)
         return redirect('certificados_pendentes')
 
+    @method_decorator(transaction.atomic)
     def createCertificado(self, request):
         strategy = get_strategy()
 
