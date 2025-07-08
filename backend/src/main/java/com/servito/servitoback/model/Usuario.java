@@ -43,23 +43,20 @@ public class Usuario implements Cadastro{
 
   private Boolean isBanned = false;
 
-//  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-//  private List<Anuncio> anuncios;
+  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+  private List<Anuncio> anuncios;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "historico_id", referencedColumnName = "id")
-  private Historico historico;
+//  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+//  @JoinColumn(name = "historico_id", referencedColumnName = "id")
+//  private Historico historico;
 
-//  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-//  private List<Certificado> certificados;
-
-//  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-//  private List<Avaliacao> avaliacoesRecebidas;
+  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+  private List<Certificado> certificados;
 
   public Usuario() {
   }
 
-  public Usuario(Long id, String nome, String email, String senha, String telefone, String documento, String endereco, String cidade, Date dataCadastro, Date dataNascimento, Historico historico) {
+  public Usuario(Long id, String nome, String email, String senha, String telefone, String documento, String endereco, String cidade, Date dataCadastro, Date dataNascimento, Boolean isBanned, List<Anuncio> anuncios, List<Certificado> certificados) {
     this.id = id;
     this.nome = nome;
     this.email = email;
@@ -70,7 +67,9 @@ public class Usuario implements Cadastro{
     this.cidade = cidade;
     this.dataCadastro = dataCadastro;
     this.dataNascimento = dataNascimento;
-    this.historico =  historico;
+    this.isBanned = isBanned;
+    this.anuncios = anuncios;
+    this.certificados = certificados;
   }
 
   @Override
@@ -177,12 +176,28 @@ public class Usuario implements Cadastro{
     this.id = id;
   }
 
-  public Historico getHistorico() {
-    return historico;
+  public List<Anuncio> getAnuncios() {
+    return anuncios;
   }
 
-  public void setHistorico(Historico historico) {
-    this.historico = historico;
+  public void setAnuncios(List<Anuncio> anuncios) {
+    this.anuncios = anuncios;
   }
+
+  public List<Certificado> getCertificados() {
+    return certificados;
+  }
+
+  public void setCertificados(List<Certificado> certificados) {
+    this.certificados = certificados;
+  }
+
+  //  public Historico getHistorico() {
+//    return historico;
+//  }
+//
+//  public void setHistorico(Historico historico) {
+//    this.historico = historico;
+//  }
 }
 
