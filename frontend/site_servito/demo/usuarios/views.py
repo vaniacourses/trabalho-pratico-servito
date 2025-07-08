@@ -5,7 +5,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
-from .forms import UsuarioForm, LoginForm
+from .forms import UsuarioForm, LoginForm, CertificadoForm
 from datetime import date
 from .services import DjangoStrategy, ApiStrategy
 from django.conf import settings
@@ -54,8 +54,7 @@ def cadastro_usuario(request):
             usuario.is_banned =  False
             usuario.senha = form.cleaned_data['senha']
             strategy = get_strategy()
-            strategy.post(form)
-            usuario.save()
+            strategy.post(usuario)
             return redirect('login')
     else:
         form = UsuarioForm()
@@ -181,7 +180,8 @@ def login_simples(request):
         try:
             adm = Adm.objects.get(email=email, senha=senha)
             request.session['email'] = adm.email
-            return redirect("/certificados/")
+            request.session['id'] = adm.id
+            return redirect("/certificadosPendentes/")
         except Adm.DoesNotExist:    
             pass
 
@@ -189,7 +189,8 @@ def login_simples(request):
         try:
             usuario = Usuario.objects.get(email=email, senha=senha)
             request.session['email'] = usuario.email
-            return redirect("/anuncios/")
+            request.session['id'] = usuario.id
+            return redirect("/index/")
         except Usuario.DoesNotExist:
             error = "Credenciais inválidas."
 
@@ -371,10 +372,74 @@ def criar_anuncio(request):
     
     return render(request, 'criar_anuncio.html')
 
+def get_pending_certificados(request):
+    filters = {
+        'pendente': True,
+    }
+    strategy = get_strategy()
+    certificados = strategy.get_list(Certificado, filters)
+    return render(request, 'certificados_pendentes.html', {'certificados': certificados})
 
 
+#TODO mudar o diagrama de classes
+def avaliar_certificado(request, certificado_id, aprovar):
+    if request.method == 'POST':
+        strategy = get_strategy()
+        certificado = strategy.get_single(Certificado, certificado_id)
+        certificado.pendente = False 
+        certificado.aprovado = True if aprovar == 'aprovar' else False
+        #TODO mudar o strategy aqui
+        certificado.save()
+    return redirect('certificados_pendentes')
+
+def adicionar_certificado(request):
+    strategy = get_strategy()
+
+    if request.method == 'POST':
+        form = CertificadoForm(request.POST)
+        if form.is_valid():
+            certificado = form.save(commit=False)
+            certificado.usuario_id = request.session['id']
+            certificado.pendente = True
+            certificado.aprovado = False
+            strategy.post(certificado)
+            return redirect('certificados', id=request.session['id'])
+    else:
+        form = CertificadoForm()
+
+    return render(request, 'adicionar_certificado.html', {'form': form})
+
+def get_certificados(request):
+    usuario_id = request.session.get('id')
+    strategy = get_strategy()
+    if not usuario_id:
+        return redirect('login')  # ou alguma página de erro
+    filter_1 = {
+        'usuario_id': usuario_id
+    }
+    certificados = strategy.get_list(Certificado, filter_1)
+    return render(request, 'certificados.html', {'certificados': certificados})
+
+def perfil(request, id):
+    strategy = get_strategy()
+    usuario = strategy.get_single(Usuario, id)
+
+    #TODO usar strategy aqui
+    if request.method == "POST":
+        form = UsuarioForm(request.POST, instance=usuario)
+        if form.is_valid():
+            strategy.post(form)
+            return redirect('perfil', id=usuario.id)  # redireciona para o próprio perfil
+    else:
+        form = UsuarioForm(instance=usuario)
+
+    return render(request, 'perfil.html', {'form': form})
 
 
-
-
-
+def excluir_certificado(request, id):
+    if request.method == "POST":
+        strategy = get_strategy()
+        certificado = strategy.get_single(Certificado, id)
+        if certificado.usuario.id == request.session.get('id'):
+            strategy.delete(certificado)
+    return redirect('certificados')

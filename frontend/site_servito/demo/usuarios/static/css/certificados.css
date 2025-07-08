@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 2em;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h2 {
+    color: #2b6777;
+    margin-bottom: 1em;
+}
+.certificado {
+    border-left: 6px solid #F2C438;
+    padding: 1em;
+    margin-bottom: 1.5em;
+    border-radius: 6px;
+    background: #fafafa;
+}
+.certificado strong {
+    color: #333;
+}
+.status {
+    font-weight: bold;
+    color: #2b6777;
+}
+.status.pendente {
+    color: #e67e22;
+}
+.status.aprovado {
+    color: #27ae60;
+}
+.botao-excluir {
+background-color: #c0392b;
+color: white;
+padding: 0.4em 1em;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.botao-excluir:hover {
+background-color: #922b21;
+}

@@ -1,0 +1,61 @@
+ body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 2em;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 2em;
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #2b6777;
+        }
+
+        .certificado {
+            border: 2px solid #ccc;
+            padding: 1em;
+            margin-bottom: 1.5em;
+            border-left: 6px solid #F2C438;
+            border-radius: 5px;
+        }
+
+        .certificado strong {
+            color: #333;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 1em;
+            margin-top: 1em;
+        }
+
+        .botao {
+            padding: 0.5em 1em;
+            border: none;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .botao-aprovar {
+            background-color: #2b6777;
+            color: white;
+        }
+
+        .botao-aprovar:hover {
+            background-color: #245360;
+        }
+
+        .botao-rejeitar {
+            background-color: #a13c3c;
+            color: white;
+        }
+
+        .botao-rejeitar:hover {
+            background-color: #7a2d2d;
+        }
