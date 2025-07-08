@@ -305,8 +305,10 @@ def recusar_contratacao(request, contratacao_id):
 
 def anuncio_edicao(request, anuncio_id):
     anuncio = get_object_or_404(Anuncio, pk=anuncio_id)
-    if request.user != anuncio.usuario:
+    email_logado = request.session.get('email')
+    if not email_logado or anuncio.usuario.email != email_logado:
         return redirect('meus_anuncios')
+    
 
     if request.method == 'POST':
         
