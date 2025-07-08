@@ -36,17 +36,17 @@ public class ContratacaoController {
 
   @GetMapping("/prestador/{userId}")
   public List<Contratacao> getContratacaoListByPrestador(@RequestBody Long userId) {
-    return this.contratacaoService.getContratacaoListByPrestador(userId)
+    return this.contratacaoService.getContratacaoListByPrestador(userId);
   }
 
   @GetMapping("/contratante/{userId}")
   public List<Contratacao> getContratacaoListByContratante(@RequestBody Long userId) {
-    return this.contratacaoService.getContratacaoListByContratante(userId)
+    return this.contratacaoService.getContratacaoListByContratante(userId);
   }
 
   @GetMapping("/anuncio/{anuncioId}")
   public List<Contratacao> getContratacaoListByAnuncio(@RequestBody Long anuncioId) {
-    return this.contratacaoService.getContratacaoListByAnuncio(anuncioId)
+    return this.contratacaoService.getContratacaoListByAnuncio(anuncioId);
   }
 
 }

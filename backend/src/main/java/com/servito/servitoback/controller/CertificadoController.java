@@ -36,12 +36,12 @@ public class CertificadoController {
 
   @GetMapping("/usuario/{userId}")
   public List<Certificado> getCertificadoListByUserId(@PathVariable Long userId) {
-    return this.certificadoService.getCertificadoListByUserId(userId)
+    return this.certificadoService.getCertificadoListByUserId(userId);
   }
 
   @GetMapping("/pendente")
   public List<Certificado> getCertificadosPendentes() {
-    return this.certificadoService.getCertificadosPendentes()
+    return this.certificadoService.getCertificadosPendentes();
   }
 
 }
