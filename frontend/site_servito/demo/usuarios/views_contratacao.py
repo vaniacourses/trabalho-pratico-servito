@@ -111,7 +111,7 @@ class ContratacaoController:
             'contratacao': contratacao,
             'usuario_logado': 'email' in request.session
             })
-
+    
     def aceitarContratacao(self, request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
