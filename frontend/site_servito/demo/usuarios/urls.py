@@ -25,8 +25,8 @@ urlpatterns = [
     path('anuncio/<int:anuncio_id>/versoes/', Caretaker.listarVersoesAnuncio, name='listar_versoes_anuncio'),
     path('anuncio/<int:anuncio_id>/restaurar/<int:snapshot_id>/', Caretaker.restaurarAnuncio, name='restaurar_anuncio'),
 
-    path('certificados/', certificado_controller.get_certificados, name = "certificados"),
-    path('adicionar_certificado/', certificado_controller.adicionar_certificado, name="adicionar_certificado"),
+    path('certificados/', certificado_controller.getCertificados, name = "certificados"),
+    path('adicionar_certificado/', certificado_controller.createCertificado, name="adicionar_certificado"),
 
     path('perfil/<int:id>', perfil_controller.perfil, name="perfil"),
     path("login/", login_controller.login_simples, name='login'),

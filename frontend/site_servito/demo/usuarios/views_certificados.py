@@ -27,7 +27,7 @@ class CertificadoController:
             cls._instance = super(CertificadoController, cls).__new__(cls)
         return cls._instance
 
-    def excluir_certificado(self,request, id):
+    def deleteCertificado(self,request, id):
         if request.method == "POST":
             strategy = get_strategy()
             certificado = strategy.get_single(Certificado, id)
@@ -35,7 +35,7 @@ class CertificadoController:
                 strategy.delete(certificado)
         return redirect('certificados')
 
-    def get_pending_certificados(self, request):
+    def solicitaCertificadosPendentes(self, request):
         filters = {
             'pendente': True,
         }
@@ -45,7 +45,7 @@ class CertificadoController:
 
 
     #TODO mudar o diagrama de classes
-    def avaliar_certificado(self, request, certificado_id, aprovar):
+    def validaCertificado(self, request, certificado_id, aprovar):
         if request.method == 'POST':
             strategy = get_strategy()
             certificado = strategy.get_single(Certificado, certificado_id)
@@ -55,7 +55,7 @@ class CertificadoController:
             strategy.post(certificado)
         return redirect('certificados_pendentes')
 
-    def adicionar_certificado(self, request):
+    def createCertificado(self, request):
         strategy = get_strategy()
 
         if request.method == 'POST':
@@ -72,7 +72,7 @@ class CertificadoController:
 
         return render(request, 'adicionar_certificado.html', {'form': form, 'usuario_logado': 'email' in request.session})
 
-    def get_certificados(self, request):
+    def getCertificados(self, request):
         usuario_id = request.session.get('id')
         strategy = get_strategy()
         if not usuario_id:
