@@ -9,11 +9,10 @@ from .forms import UsuarioForm, LoginForm, CertificadoForm
 from datetime import date
 from .services import DjangoStrategy, ApiStrategy
 from django.conf import settings
-from .models import Anuncio, Usuario
 from django.contrib.auth.hashers import make_password
 from django.views import View
 from django.contrib.auth.views import LogoutView
-from .models import Adm, Usuario, Contratacao, Certificado
+from .models import Anuncio, Adm, Usuario, Contratacao, Certificado
 from django.contrib import messages
 
 def get_strategy():
@@ -79,7 +78,7 @@ def get_contratacoes(request):
     contratacoes_list_2 = strategy.get_list(Contratacao, filters_2)
     contratacoes_list = list(set(contratacoes_list_1) | set(contratacoes_list_2))
     if query:
-        contratacoes_list = [a for a in pendentes_list if query.lower() in a.titulo.lower() 
+        contratacoes_list = [a for a in contratacoes_list if query.lower() in a.titulo.lower() 
                          or query.lower() in a.descricao.lower() 
                          or query.lower() in a.tags.lower()]
     
@@ -102,17 +101,19 @@ def get_contratacao_by_id(request, id):
         })
 
 def aceitar_contratacao(request, contratacao_id):
-    contratacao = get_object_or_404(Contratacao, id=contratacao_id)
+    strategy = get_strategy()
+    contratacao = strategy.get_single(Contratacao, contratacao_id)
     contratacao.pendente = False
     contratacao.aceito = True
-    contratacao.save()
+    strategy.post(contratacao)
     return redirect('pendentes')
 
 def recusar_contratacao(request, contratacao_id):
-    contratacao = get_object_or_404(Contratacao, id=contratacao_id)
-    contratacao.pendente = False
+    strategy = get_strategy()
+    contratacao = strategy.get_single(Contratacao, contratacao_id)
     contratacao.aceito = False
-    contratacao.save()
+    contratacao.pendente = False
+    strategy.post(contratacao)
     return redirect('pendentes')
 
 def criar_contratacao(request, id):
@@ -128,7 +129,8 @@ def criar_contratacao(request, id):
         descricao = request.POST.get('detalhes')
         preco = request.POST.get('valor')
 
-        usuario = Usuario.objects.filter(email=email_logado).first()
+        usuario = strategy.get_list(Usuario, {"email": email_logado})
+        usuario = usuario[0] if usuario else None
         if not usuario:
             messages.error(request, "Usuário não encontrado.")
             return redirect('index')
@@ -142,7 +144,7 @@ def criar_contratacao(request, id):
                 contratante=usuario,
                 prestador=prestador
             )
-        contratacao.save()
+        strategy.post(contratacao)
         messages.success(request, "Anúncio criado com sucesso!")
         return redirect('anuncios')
     return render(request, 'contratar.html', {'anuncio': anuncio})

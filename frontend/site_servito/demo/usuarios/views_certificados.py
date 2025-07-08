@@ -44,7 +44,7 @@ def avaliar_certificado(request, certificado_id, aprovar):
         certificado.pendente = False 
         certificado.aprovado = True if aprovar == 'aprovar' else False
         #TODO mudar o strategy aqui
-        certificado.save()
+        strategy.post(certificado)
     return redirect('certificados_pendentes')
 
 def adicionar_certificado(request):
