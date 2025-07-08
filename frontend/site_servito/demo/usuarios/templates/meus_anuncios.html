@@ -3,34 +3,31 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Anúncios - Servito</title>
+    <title>Meus Anúncios - Servito</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'css/anuncios.css' %}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Histórico de Contratações</h1>
+        <h1>Todos os Anúncios</h1>
 
-        <form method="get" action="{% url 'historico' %}" class="search-form">
-            <input type="text" name="q" placeholder="Pesquisar Contratações..." value="{{ request.GET.q }}">
+        <form method="get" action="{% url 'meus_anuncios' %}" class="search-form">
+            <input type="text" name="q" placeholder="Pesquisar seus anúncios..." value="{{ request.GET.q }}">
             <button type="submit">Buscar</button>
         </form>
 
         <div class="grid">
-            {% for contratacao in page_obj %}
-            <a href="{% url 'contratacao' contratacao.id %}" class="card-link" >
+            {% for anuncio in page_obj %}
+            <a href="{% url 'anuncio_edicao' anuncio.id %}" class="card-link" >
                 <div class="card">
-                    <h3>{{ contratacao.prazo }}</h3>
-                    <p><strong>Preço:</strong> {{ contratacao.preco }}</p>
-                    <p><strong>Prazo:</strong> {{ contratacao.prazo }}</p>
-                    <p><strong>Finalizado:</strong> {{ contratacao.finalizado }}</p>
-                    <p><strong>Prestador:</strong> {{ contratacao.prestador.nome }}</p>
-                    <p><strong>Contratante:</strong> {{ contratacao.contratante.nome }}</p>
-                    <p><strong>Descrição:</strong> {{ contratacao.descricao }}</p>
+                    <h3>{{ anuncio.titulo }}</h3>
+                    <p>{{ anuncio.descricao|truncatewords:24 }}</p>
+                    <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
+                    <p><strong>Categoria:</strong> {{ anuncio.tags }}</p>
                 </div>
             </a>
             {% empty %}
-                <p>Nenhuma contratação encontrada.</p>
+                <p>Nenhum anúncio encontrado.</p>
             {% endfor %}
         </div>
 
@@ -56,5 +53,6 @@
             {% endif %}
         </div>
     </div>
+    <a href="{% url 'criar_anuncio' %}" class="botao-criar-anuncio">Criar Novo Anúncio</a>
 </body>
 </html>

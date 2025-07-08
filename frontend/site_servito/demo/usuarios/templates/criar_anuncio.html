@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Criar Anúncio - Servito</title>
+    <link href="{% static 'css/anuncio_individual.css' %}" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <h1>Criar Novo Anúncio</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required />
+
+        <label for="tags">Categoria (tags):</label>
+        <input type="text" id="tags" name="tags" required />
+
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" name="cidade" required />
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" rows="4" required></textarea>
+
+        <button type="submit">Criar Anúncio</button>
+    </form>
+    <a href="{% url 'meus_anuncios' %}">Voltar para Meus Anúncios</a>
+</div>
+</body>
+</html>
