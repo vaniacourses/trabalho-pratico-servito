@@ -20,10 +20,11 @@ def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
 
 def anuncios(request):
+    strategy = get_strategy()
     if 'email' not in request.session:
         return redirect('login')
     email = request.session['email']
-    usuario = Usuario.objects.get(email=email)
+    usuario = strategy.get_list(Usuario, {'email':email})
     return render(request, 'anuncios.html', {'usuario_logado': request.user.is_authenticated})
 
 def get_anuncios(request):
@@ -87,7 +88,8 @@ def get_anuncio_by_id(request, id):
         })
 
 def anuncio_edicao(request, anuncio_id):
-    anuncio = get_object_or_404(Anuncio, pk=anuncio_id)
+    strategy = get_strategy()
+    anuncio = strategy.get_single(Anuncio, anuncio_id)
     email_logado = request.session.get('email')
     if not email_logado or anuncio.usuario.email != email_logado:
         return redirect('meus_anuncios')
@@ -105,20 +107,21 @@ def anuncio_edicao(request, anuncio_id):
         anuncio.tags = tags
         anuncio.cidade = cidade
         anuncio.descricao = descricao
-        anuncio.save()
+        strategy.post(anuncio)
 
         return redirect('meus_anuncios')  
 
     return render(request, 'editar_anuncio.html', {'anuncio': anuncio})
 
 def anuncio_exclusao(request, id):
-    anuncio = get_object_or_404(Anuncio, pk=id)
+    strategy = get_strategy()
+    anuncio = strategy.get_single(Anuncio, id)
     email_logado = request.session.get('email')
     if not email_logado or email_logado != anuncio.usuario.email:
         return redirect('meus_anuncios')  
 
     if request.method == 'POST':
-        anuncio.delete()
+        strategy.delete(anuncio)
         return redirect('meus_anuncios')
     else:
         
@@ -126,6 +129,7 @@ def anuncio_exclusao(request, id):
 
 
 def criar_anuncio(request):
+    strategy = get_strategy()
     email_logado = request.session.get('email')
     if not email_logado:
         return redirect('index')  
@@ -137,7 +141,8 @@ def criar_anuncio(request):
         cidade = request.POST.get('cidade')
 
         
-        usuario = Usuario.objects.filter(email=email_logado).first()
+        usuarios = strategy.get_list(Usuario, {"email": email_logado})
+        usuario = usuarios.first() if usuarios else None
         if not usuario:
             messages.error(request, "Usuário não encontrado.")
             return redirect('index')
@@ -150,7 +155,7 @@ def criar_anuncio(request):
             cidade=cidade,
             usuario=usuario
         )
-        anuncio.save()
+        strategy.post(anuncio)
         messages.success(request, "Anúncio criado com sucesso!")
         return redirect('meus_anuncios')
 
