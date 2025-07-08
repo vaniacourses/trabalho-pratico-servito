@@ -1,9 +1,12 @@
 from django.urls import path
-from .views import index, home, cadastro_usuario, anuncios,get_anuncios,get_anuncio_by_id,login_simples, logout_simples, teste_sessao, perfil, contratar, avaliar_contratacao, get_pendentes, get_contratacoes, get_contratacao_by_id, get_pendente_by_id, aceitar_contratacao, recusar_contratacao, get_meus_anuncios, get_meu_anuncio_by_id, anuncio_edicao, anuncio_exclusao, criar_anuncio, get_certificados, adicionar_certificado, criar_contratacao
+from .views import index, cadastro_usuario,login_simples, logout_simples, perfil
+from .views_contratacao import contratar, avaliar_contratacao, get_pendentes, get_contratacoes, get_contratacao_by_id, get_pendente_by_id, aceitar_contratacao, recusar_contratacao, criar_contratacao
+from .views_certificados import get_certificados, adicionar_certificado
+from .views_anuncios import anuncios,get_anuncios,get_anuncio_by_id, anuncio_edicao, anuncio_exclusao, criar_anuncio, get_meus_anuncios, get_meu_anuncio_by_id
+
 urlpatterns = [
     #path('logout/', auth_views.LogoutView.as_view(next_page='welcome'), name='logout'),
     path('', index, name='index'),
-    path('home/', home, name='home'),
     path('cadastro/', cadastro_usuario, name='cadastro'),
     path('anuncios/', get_anuncios, name='anuncios'),
     path('meus_anuncios/', get_meus_anuncios, name='meus_anuncios'),
@@ -16,7 +19,6 @@ urlpatterns = [
     path("login/", login_simples, name='login'),
     path("logout/", logout_simples, name='logout'),
     path('index/', index, name='index'),
-    path('teste_sessao/', teste_sessao, name='teste_sessao'),
     path('anuncio/<int:id>/contratar/',  contratar, name='contratar'),
     path('contratacao/<int:id>/', get_contratacao_by_id, name='contratacao'),
     path('pendentes/', get_pendentes, name='pendentes'),
