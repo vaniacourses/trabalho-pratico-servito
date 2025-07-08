@@ -20,7 +20,8 @@
                 <p><strong>Cidade:</strong> {{ anuncio.cidade }}</p>
             </div>
             <div class="item_informacoes_contrato">
-                <form id="contratacaoForm">
+                <form id="contratacaoForm" method="post" action="{% url 'contratar' anuncio.id %}">
+                    {% csrf_token %}
                     <label>Data do serviço</label>
                     <input type="date" id="data" name="data" required>
 

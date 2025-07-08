@@ -374,6 +374,40 @@ def criar_anuncio(request):
     
     return render(request, 'criar_anuncio.html')
 
+def criar_contratacao(request, id):
+    strategy = get_strategy()
+    anuncio = strategy.get_single(Anuncio, id)
+    prestador = anuncio.usuario
+    email_logado = request.session.get('email')
+    if not email_logado:
+        return redirect('index')  
+
+    if request.method == 'POST':
+        prazo = request.POST.get('data')
+        descricao = request.POST.get('detalhes')
+        preco = request.POST.get('valor')
+
+        usuario = Usuario.objects.filter(email=email_logado).first()
+        if not usuario:
+            messages.error(request, "Usuário não encontrado.")
+            return redirect('index')
+        contratacao = Contratacao(
+                preco=preco,
+                descricao=descricao,
+                prazo=prazo,
+                aceito=False,
+                pendente=True,
+                finalizado=False,
+                contratante=usuario,
+                prestador=prestador
+            )
+        contratacao.save()
+        messages.success(request, "Anúncio criado com sucesso!")
+        return redirect('anuncios')
+    return render(request, 'contratar.html', {'anuncio': anuncio})
+        
+
+
 def get_pending_certificados(request):
     filters = {
         'pendente': True,
