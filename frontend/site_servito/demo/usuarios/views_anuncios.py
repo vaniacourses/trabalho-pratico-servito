@@ -44,7 +44,7 @@ class Caretaker:
             messages.success(request, "Anúncio atualizado e snapshot criado.")
             return redirect('meus_anuncios')
 
-        return render(request, 'editar_anuncio.html', {'anuncio': anuncio})
+        return render(request, 'editar_anuncio.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session})
 
     def restaurar_anuncio(self, request, anuncio_id, snapshot_id):
         strategy = get_strategy()
@@ -69,7 +69,8 @@ class Caretaker:
         snapshots = anuncio.snapshots.all().order_by('-criado_em')
         return render(request, 'listar_snapshots.html', {
             'anuncio': anuncio,
-            'snapshots': snapshots
+            'snapshots': snapshots,
+            'usuario_logado': 'email' in request.session
         })
 
 
@@ -142,14 +143,16 @@ class AnuncioController:
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
         return render(request, 'anuncio_edicao.html', {
-            'anuncio': anuncio
+            'anuncio': anuncio,
+            'usuario_logado': 'email' in request.session
             })
 
     def get_anuncio_by_id(self,request, id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
         return render(request, 'anuncio_individual.html', {
-            'anuncio': anuncio
+            'anuncio': anuncio,
+            'usuario_logado': 'email' in request.session
             })
 
     def anuncio_edicao(self,request, anuncio_id):
@@ -175,7 +178,7 @@ class AnuncioController:
 
             return redirect('meus_anuncios')  
 
-        return render(request, 'editar_anuncio.html', {'anuncio': anuncio})
+        return render(request, 'editar_anuncio.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session})
 
     def anuncio_exclusao(self,request, id):
         strategy = get_strategy()
@@ -224,4 +227,4 @@ class AnuncioController:
             return redirect('meus_anuncios')
 
         
-        return render(request, 'criar_anuncio.html')
+        return render(request, 'criar_anuncio.html', {'usuario_logado': 'email' in request.session})

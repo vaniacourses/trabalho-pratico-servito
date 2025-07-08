@@ -41,7 +41,7 @@ class CertificadoController:
         }
         strategy = get_strategy()
         certificados = strategy.get_list(Certificado, filters)
-        return render(request, 'certificados_pendentes.html', {'certificados': certificados})
+        return render(request, 'certificados_pendentes.html', {'certificados': certificados, 'usuario_logado': 'email' in request.session})
 
 
     #TODO mudar o diagrama de classes
@@ -70,7 +70,7 @@ class CertificadoController:
         else:
             form = CertificadoForm()
 
-        return render(request, 'adicionar_certificado.html', {'form': form})
+        return render(request, 'adicionar_certificado.html', {'form': form, 'usuario_logado': 'email' in request.session})
 
     def get_certificados(self, request):
         usuario_id = request.session.get('id')
@@ -81,4 +81,4 @@ class CertificadoController:
             'usuario_id': usuario_id
         }
         certificados = strategy.get_list(Certificado, filter_1)
-        return render(request, 'certificados.html', {'certificados': certificados})
+        return render(request, 'certificados.html', {'certificados': certificados, 'usuario_logado': 'email' in request.session,})

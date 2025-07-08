@@ -148,4 +148,4 @@ class PerfilController:
         else:
             form = UsuarioForm(instance=usuario)
 
-        return render(request, 'perfil.html', {'form': form})
+        return render(request, 'perfil.html', {'form': form, 'usuario_logado': 'email' in request.session})

@@ -66,7 +66,8 @@ class ContratacaoController:
         strategy = get_strategy()
         pendente = strategy.get_single(Contratacao, id)
         return render(request, 'pendente.html', {
-            'pendente': pendente
+            'pendente': pendente,
+            'usuario_logado': 'email' in request.session,
             })
 
     def get_contratacoes(self, request, finalizado = 0):
@@ -75,7 +76,7 @@ class ContratacaoController:
         email_logado = request.session.get('email')
         usuario = strategy.get_list(Usuario, {'email': email_logado})[0]
         if not email_logado:
-            return render(request, 'index.html')
+            return render(request, 'index.html' )
         filters_1 = {
             'aceito': True,
             'contratante__email': email_logado
@@ -107,7 +108,8 @@ class ContratacaoController:
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, id)
         return render(request, 'contratacao.html', {
-            'contratacao': contratacao
+            'contratacao': contratacao,
+            'usuario_logado': 'email' in request.session
             })
 
     def aceitar_contratacao(self, request, contratacao_id):
@@ -157,7 +159,7 @@ class ContratacaoController:
             strategy.post(contratacao)
             messages.success(request, "Anúncio criado com sucesso!")
             return redirect('anuncios')
-        return render(request, 'contratar.html', {'anuncio': anuncio})
+        return render(request, 'contratar.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session,})
 
     def finalizar_contratacao(self,request, contratacao_id):
         strategy = get_strategy()
