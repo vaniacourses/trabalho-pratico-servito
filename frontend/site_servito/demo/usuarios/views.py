@@ -22,17 +22,17 @@ def get_strategy():
     return ApiStrategy() if settings.USE_API else DjangoStrategy()
 
 
-class CadastroController:
+class UsuarioController:
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(CadastroController, cls).__new__(cls)
+            cls._instance = super(UsuarioController, cls).__new__(cls)
         return cls._instance
     def cadastro(request):
         return render(request, "cadastro.html")
 
-    def cadastro_usuario(request):
+    def createUsuario(request):
         if request.method == 'POST':
             form = UsuarioForm(request.POST)
             if form.is_valid():
@@ -94,7 +94,7 @@ class MeuLogoutView(View):
         return redirect('index') 
 '''
 class LoginController:
-    def login_simples(self, request):
+    def loginSimples(self, request):
         strategy = get_strategy()
         usuario = None
         form = LoginForm(request.POST or None)
@@ -124,7 +124,7 @@ class LoginController:
         return render(request, "login.html", {"form": form, "error": error})
 
 
-    def logout_simples(self, request):
+    def logoutSimples(self, request):
         request.session.flush()
         return redirect('index')  
 
