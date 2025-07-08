@@ -37,14 +37,14 @@ urlpatterns = [
 
 
     path('anuncio/<int:id>/contratar/',  contratacao_controller.contratar, name='contratar'),
-    path('contratacao/<int:id>/', contratacao_controller.get_contratacao_by_id, name='contratacao'),
-    path('pendentes/', contratacao_controller.get_pendentes, name='pendentes'),
-    path('pendente/<int:id>/', contratacao_controller.get_pendente_by_id, name='pendente'),
-    path('historico/<int:finalizado>', contratacao_controller.get_contratacoes, name='historico'),
-    path('contratacao/<int:contratacao_id>/aceitar/', contratacao_controller.aceitar_contratacao, name='aceitar_contratacao'),
-    path('contratacao/<int:contratacao_id>/recusar/', contratacao_controller.recusar_contratacao, name='recusar_contratacao'),
-    path('contratacao/<int:contratacao_id>/finalizar/', contratacao_controller.finalizar_contratacao, name='finalizar_contratacao'),
-    path('contratar/<int:id>/', contratacao_controller.criar_contratacao, name='criar_contratacao'),
+    path('contratacao/<int:id>/', contratacao_controller.getContratacaoById, name='contratacao'),
+    path('pendentes/', contratacao_controller.getPendentes, name='pendentes'),
+    path('pendente/<int:id>/', contratacao_controller.getPendenteById, name='pendente'),
+    path('historico/<int:finalizado>', contratacao_controller.getContratacoes, name='historico'),
+    path('contratacao/<int:contratacao_id>/aceitar/', contratacao_controller.aceitarContratacao, name='aceitar_contratacao'),
+    path('contratacao/<int:contratacao_id>/recusar/', contratacao_controller.recusarContratacao, name='recusar_contratacao'),
+    path('contratacao/<int:contratacao_id>/finalizar/', contratacao_controller.finalizarContratacao, name='finalizar_contratacao'),
+    path('contratar/<int:id>/', contratacao_controller.createContratacao, name='criar_contratacao'),
     
 
 

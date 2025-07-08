@@ -33,10 +33,10 @@ class ContratacaoController:
 
         return render(request, "contratar.html", {"anuncio": anuncio})
 
-    def avaliar_contratacao(self,request):
+    def avaliarContratacao(self,request):
         return redirect('contratacao')
 
-    def get_pendentes(self,request):
+    def getPendentes(self,request):
         strategy = get_strategy()
         email_logado = request.session.get('email')
         if not email_logado:
@@ -62,7 +62,7 @@ class ContratacaoController:
             'usuario_logado': 'email' in request.session
         })
 
-    def get_pendente_by_id(self, request, id):
+    def getPendenteById(self, request, id):
         strategy = get_strategy()
         pendente = strategy.get_single(Contratacao, id)
         return render(request, 'pendente.html', {
@@ -70,7 +70,7 @@ class ContratacaoController:
             'usuario_logado': 'email' in request.session,
             })
 
-    def get_contratacoes(self, request, finalizado = 0):
+    def getContratacoes(self, request, finalizado = 0):
         finalizado = bool(finalizado)
         strategy = get_strategy()
         email_logado = request.session.get('email')
@@ -104,7 +104,7 @@ class ContratacaoController:
             'finalizado': int(finalizado)
         })
 
-    def get_contratacao_by_id(self, request, id):
+    def getContratacaoById(self, request, id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, id)
         return render(request, 'contratacao.html', {
@@ -112,7 +112,7 @@ class ContratacaoController:
             'usuario_logado': 'email' in request.session
             })
 
-    def aceitar_contratacao(self, request, contratacao_id):
+    def aceitarContratacao(self, request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
         contratacao.pendente = False
@@ -120,7 +120,7 @@ class ContratacaoController:
         strategy.post(contratacao)
         return redirect('pendentes')
 
-    def recusar_contratacao(self, request, contratacao_id):
+    def recusarContratacao(self, request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
         contratacao.aceito = False
@@ -128,7 +128,7 @@ class ContratacaoController:
         strategy.post(contratacao)
         return redirect('pendentes')
 
-    def criar_contratacao(self, request, id):
+    def createContratacao(self, request, id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
         prestador = anuncio.usuario
@@ -161,7 +161,7 @@ class ContratacaoController:
             return redirect('anuncios')
         return render(request, 'contratar.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session,})
 
-    def finalizar_contratacao(self,request, contratacao_id):
+    def finalizarContratacao(self,request, contratacao_id):
         strategy = get_strategy()
         contratacao = strategy.get_single(Contratacao, contratacao_id)
 
