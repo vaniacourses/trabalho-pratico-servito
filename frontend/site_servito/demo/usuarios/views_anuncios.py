@@ -24,7 +24,7 @@ class Caretaker:
         if cls._instance is None:
             cls._instance = super(Caretaker, cls).__new__(cls)
         return cls._instance
-    def atualizar_anuncio(self,request, anuncio_id):
+    def atualizarAnuncio(self,request, anuncio_id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, anuncio_id)
         email_logado = request.session.get('email')
@@ -46,7 +46,7 @@ class Caretaker:
 
         return render(request, 'editar_anuncio.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session})
 
-    def restaurar_anuncio(self, request, anuncio_id, snapshot_id):
+    def restaurarAnuncio(self, request, anuncio_id, snapshot_id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, anuncio_id)
         snapshot = anuncio.snapshots.get(id=snapshot_id)
@@ -58,7 +58,7 @@ class Caretaker:
         messages.success(request, "Anúncio restaurado para versão anterior.")
         return redirect('meus_anuncios')
     
-    def listar_versoes_anuncio(self, request, anuncio_id):
+    def listarVersoesAnuncio(self, request, anuncio_id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, anuncio_id)
 
@@ -93,7 +93,7 @@ class AnuncioController:
         usuario = strategy.get_list(Usuario, {'email':email})
         return render(request, 'anuncios.html', {'usuario_logado': request.user.is_authenticated})
 
-    def get_anuncios(self,request):
+    def getAnuncios(self,request):
         strategy = get_strategy()
         query = request.GET.get('q', '')
         if query:
@@ -114,7 +114,7 @@ class AnuncioController:
             'usuario_logado': 'email' in request.session
         })
 
-    def get_meus_anuncios(self,request):
+    def getMeusAnuncios(self,request):
         strategy = get_strategy()
         email_logado = request.session.get('email')
         if not email_logado:
@@ -139,7 +139,7 @@ class AnuncioController:
             'usuario_logado': 'email' in request.session
         })
 
-    def get_meu_anuncio_by_id(self,request, id):
+    def getMeuAnuncioById(self,request, id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
         return render(request, 'anuncio_edicao.html', {
@@ -147,7 +147,7 @@ class AnuncioController:
             'usuario_logado': 'email' in request.session
             })
 
-    def get_anuncio_by_id(self,request, id):
+    def getAnuncioById(self,request, id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
         return render(request, 'anuncio_individual.html', {
@@ -155,7 +155,7 @@ class AnuncioController:
             'usuario_logado': 'email' in request.session
             })
 
-    def anuncio_edicao(self,request, anuncio_id):
+    def updateAnuncio(self,request, anuncio_id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, anuncio_id)
         email_logado = request.session.get('email')
@@ -180,7 +180,7 @@ class AnuncioController:
 
         return render(request, 'editar_anuncio.html', {'anuncio': anuncio, 'usuario_logado': 'email' in request.session})
 
-    def anuncio_exclusao(self,request, id):
+    def deleteAnuncio(self,request, id):
         strategy = get_strategy()
         anuncio = strategy.get_single(Anuncio, id)
         email_logado = request.session.get('email')
@@ -195,7 +195,7 @@ class AnuncioController:
             return redirect('meus_anuncios')
 
 
-    def criar_anuncio(self,request):
+    def createAnuncio(self,request):
         strategy = get_strategy()
         email_logado = request.session.get('email')
         if not email_logado:
