@@ -27,18 +27,15 @@ urlpatterns = [
     path('anuncio/criar/', anuncio_controller.createAnuncio, name='criar_anuncio'),
     path('anuncio/<int:anuncio_id>/versoes/', caretaker.listarVersoesAnuncio, name='listar_versoes_anuncio'),
     path('anuncio/<int:anuncio_id>/restaurar/<int:snapshot_id>/', caretaker.restaurarAnuncio, name='restaurar_anuncio'),
-
     path('certificados/', certificado_controller.getCertificados, name = "certificados"),
+    path('certificado_exclusao/<int:id>/', certificado_controller.deleteCertificado, name='certificado_exclusao'),
     path('adicionar_certificado/', certificado_controller.createCertificado, name="adicionar_certificado"),
-
     path('perfil/<int:id>', perfil_controller.perfil, name="perfil"),
     path("login/", login_controller.loginSimples, name='login'),
     path("logout/", login_controller.logoutSimples, name='logout'),
     path('index/', login_controller.index, name='index'),
     path('', login_controller.index, name='index'),
     path('cadastro/', usuario_controller.createUsuario, name='cadastro'),
-
-
     path('anuncio/<int:id>/contratar/',  contratacao_controller.contratar, name='contratar'),
     path('contratacao/<int:id>/', contratacao_controller.getContratacaoById, name='contratacao'),
     path('pendentes/', contratacao_controller.getPendentes, name='pendentes'),

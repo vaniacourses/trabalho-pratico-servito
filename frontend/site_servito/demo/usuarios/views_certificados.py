@@ -54,7 +54,6 @@ class CertificadoController:
             certificado = strategy.get_single(Certificado, certificado_id)
             certificado.pendente = False 
             certificado.aprovado = True if aprovar == 'aprovar' else False
-            #TODO mudar o strategy aqui
             strategy.post(certificado)
         return redirect('certificados_pendentes')
 
@@ -70,7 +69,7 @@ class CertificadoController:
                 certificado.pendente = True
                 certificado.aprovado = False
                 strategy.post(certificado)
-                return redirect('certificados', id=request.session['id'])
+                return redirect('certificados')
         else:
             form = CertificadoForm()
 
